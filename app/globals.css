@@ -378,8 +378,24 @@ body {
 
 /* Edge fade mask for hero illustration */
 .edge-fade {
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.2) 65%, transparent 85%);
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.2) 65%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 0%, rgba(0,0,0,0.8) 22%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 58%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 0%, rgba(0,0,0,0.8) 22%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 58%, transparent 75%);
+}
+
+/* Logo shimmer animation for loader */
+@keyframes logo-shimmer {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* Hover shimmer on static logo */
+.logo-hover .logo-rect {
+  animation: none;
+}
+
+.logo-hover:hover .logo-rect {
+  animation: logo-shimmer 1.4s ease-in-out infinite;
+  animation-delay: var(--rect-delay);
 }
 
 /* Scrollbar */

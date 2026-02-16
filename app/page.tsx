@@ -130,62 +130,65 @@ export default function Home() {
       <Header />
 
       <main className="min-h-screen">
-        {/* ── Mentorship Illustration ── */}
-        <div className="relative pt-20 md:pt-28 overflow-hidden">
-          <div className="edge-fade max-w-md mx-auto px-6 opacity-60">
-            <MentorshipAnimation className="w-full h-auto" />
+        {/* ── Hero (full viewport) ── */}
+        <div className="min-h-dvh flex flex-col justify-center">
+          {/* ── Mentorship Illustration ── */}
+          <div className="relative pt-20 md:pt-28 overflow-hidden">
+            <div className="edge-fade max-w-md mx-auto px-6 opacity-60">
+              <MentorshipAnimation className="w-full h-auto" />
+            </div>
           </div>
-        </div>
 
-        {/* ── Hero ── */}
-        <section className="px-6 pt-8 pb-10 md:pt-12 md:pb-16">
-          <div className="max-w-[660px] mx-auto text-center">
-            <FadeIn>
-              <div className="flex items-center justify-center gap-3 mb-10">
-                <Image
-                  src="/dara.jpg"
-                  alt="Dara Sobaloju"
-                  width={32}
-                  height={32}
-                  className="rounded-full"
-                />
-                <p className="text-[15px] text-foreground-secondary">
-                  Taught by{' '}
-                  <a
-                    href="https://x.com/darasoba"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-foreground font-medium hover:underline underline-offset-[3px]"
-                  >
-                    Dara Sobaloju
-                  </a>
+          {/* ── Hero Copy ── */}
+          <section className="px-6 pt-8 pb-10 md:pt-12 md:pb-16">
+            <div className="max-w-[660px] mx-auto text-center">
+              <FadeIn>
+                <div className="flex items-center justify-center gap-3 mb-10">
+                  <Image
+                    src="/dara.jpg"
+                    alt="Dara Sobaloju"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                  <p className="text-[15px] text-foreground-secondary">
+                    Taught by{' '}
+                    <a
+                      href="https://x.com/darasoba"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground font-medium hover:underline underline-offset-[3px]"
+                    >
+                      Dara Sobaloju
+                    </a>
+                  </p>
+                </div>
+              </FadeIn>
+              <FadeIn delay={80}>
+                <h1 className="text-[40px] leading-[44px] md:text-[48px] md:leading-[52px] font-[650] tracking-tight text-foreground">
+                  Go from idea to shipped product in 4&nbsp;weeks.
+                </h1>
+              </FadeIn>
+              <FadeIn delay={200}>
+                <p className="mt-8 text-lg md:text-xl text-foreground-secondary leading-relaxed max-w-[520px] mx-auto">
+                  A hands-on mentorship where you learn AI coding tools and ship
+                  your own project. Not a course. Not a tutorial. You build
+                  something real.
                 </p>
-              </div>
-            </FadeIn>
-            <FadeIn delay={80}>
-              <h1 className="text-[40px] leading-[44px] md:text-[48px] md:leading-[52px] font-[650] tracking-tight text-foreground">
-                Go from idea to shipped product in 4&nbsp;weeks.
-              </h1>
-            </FadeIn>
-            <FadeIn delay={200}>
-              <p className="mt-8 text-lg md:text-xl text-foreground-secondary leading-relaxed max-w-[520px] mx-auto">
-                A hands-on mentorship where you learn AI coding tools and ship
-                your own project. Not a course. Not a tutorial. You build
-                something real.
-              </p>
-            </FadeIn>
-            <FadeIn delay={350}>
-              <div className="mt-12 flex flex-col items-center gap-5">
-                <Link href="/apply">
-                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55</Button>
-                </Link>
-                <p className="text-[13px] text-foreground-tertiary">
-                  Next cohort starts March 2026. Limited to 50 spots.
-                </p>
-              </div>
-            </FadeIn>
-          </div>
-        </section>
+              </FadeIn>
+              <FadeIn delay={350}>
+                <div className="mt-12 flex flex-col items-center gap-5">
+                  <Link href="/apply">
+                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55</Button>
+                  </Link>
+                  <p className="text-[13px] text-foreground-tertiary">
+                    Next cohort starts March 2026. Limited to 50 spots.
+                  </p>
+                </div>
+              </FadeIn>
+            </div>
+          </section>
+        </div>
 
         {/* ── Enrollment Status (only when closed) ── */}
         {ENROLLMENT_CLOSED && (

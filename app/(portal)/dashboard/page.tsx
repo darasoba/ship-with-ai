@@ -42,7 +42,16 @@ export default async function DashboardPage() {
       continueSlug = lastRead?.material_slug || 'curriculum'
     }
   }
-  const currentWeek = 1
+  // Calculate current week from cohort start date (env var) — clamp to 1-4
+  const cohortStart = process.env.NEXT_PUBLIC_COHORT_START_DATE
+  let currentWeek = 1
+  if (cohortStart) {
+    const start = new Date(cohortStart)
+    const now = new Date()
+    const diffMs = now.getTime() - start.getTime()
+    const diffWeeks = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000))
+    currentWeek = Math.max(1, Math.min(4, diffWeeks + 1))
+  }
   const currentWeekConfig = WEEK_CONFIG[currentWeek - 1]
   const continueMaterial = MATERIALS_ORDER.find((m) => m.slug === continueSlug)
 

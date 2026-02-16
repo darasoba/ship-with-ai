@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { PortalHeader } from '@/components/layout/portal-header'
+import { CommandPalette } from '@/components/portal/command-palette'
 
 const hasSupabase =
   process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
@@ -33,6 +34,7 @@ export default async function PortalLayout({
   return (
     <div className="min-h-screen bg-background">
       <PortalHeader userName={userName} />
+      <CommandPalette />
       <main>{children}</main>
     </div>
   )

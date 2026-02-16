@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shipwithai.com'),
   title: "Ship With AI — Build and ship your project in 4 weeks",
   description:
     "A 4-week mentorship for designers, developers, and product people who want to build real products with AI coding tools. Small cohorts. Hands-on mentorship. You ship something real.",

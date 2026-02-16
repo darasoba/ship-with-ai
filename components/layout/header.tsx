@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/ui/logo'
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -22,9 +23,9 @@ export function Header() {
           <div className="max-w-6xl mx-auto flex items-center justify-between">
             <Link
               href="/"
-              className="text-[15px] font-semibold tracking-tight text-foreground"
+              className="text-foreground"
             >
-              Ship With AI
+              <Logo className="h-6" />
             </Link>
 
             {/* Desktop nav */}

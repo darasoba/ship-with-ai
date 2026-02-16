@@ -56,7 +56,6 @@ export default function ApplyPage() {
   const [form, setForm] = useState<FormData>(initialFormData)
   const [errors, setErrors] = useState<Errors>({})
   const [submitting, setSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState('')
 
   const update = <K extends keyof FormData>(key: K, value: FormData[K]) => {
@@ -86,41 +85,22 @@ export default function ApplyPage() {
         body: JSON.stringify(form),
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        const data = await res.json()
         setSubmitError(data.error || 'Something went wrong. Please try again.')
         return
       }
 
-      setSubmitted(true)
+      // Redirect to Paystack checkout
+      if (data.authorizationUrl) {
+        window.location.href = data.authorizationUrl
+      }
     } catch {
       setSubmitError('Network error. Please check your connection and try again.')
     } finally {
       setSubmitting(false)
     }
-  }
-
-  if (submitted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="max-w-md w-full text-center space-y-6">
-          <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto">
-            <svg className="w-8 h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-foreground">Application submitted</h1>
-          <p className="text-foreground-secondary leading-relaxed">
-            We&apos;ll review your application and get back to you within 48 hours.
-          </p>
-          <Link href="/">
-            <Button variant="secondary" className="mt-4">
-              Back to homepage
-            </Button>
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -224,13 +204,13 @@ export default function ApplyPage() {
             )}
 
             <Button type="submit" disabled={submitting} className="w-full">
-              {submitting ? 'Submitting...' : 'Submit application'}
+              {submitting ? 'Redirecting to payment...' : 'Proceed to Pay — ₦75,000'}
             </Button>
           </form>
         </Card>
 
         <p className="text-center text-[12px] text-foreground-tertiary mt-6">
-          Your info is kept confidential. We&apos;ll respond within 48 hours.
+          You&apos;ll be redirected to Paystack to complete payment securely.
         </p>
       </div>
     </div>

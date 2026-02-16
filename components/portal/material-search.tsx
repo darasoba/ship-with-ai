@@ -4,15 +4,26 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Fuse from 'fuse.js'
 import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
+import { FolderCard } from '@/components/ui/folder-card'
 import type { SearchIndexItem } from '@/lib/materials'
 import { CATEGORY_LABELS, type MaterialCategory } from '@/lib/constants'
 
-interface MaterialSearchProps {
-  searchIndex: SearchIndexItem[]
+interface MaterialMeta {
+  slug: string
+  title: string
+  description: string
+  category: string
+  readingTime: number
 }
 
-export function MaterialSearch({ searchIndex }: MaterialSearchProps) {
+interface MaterialSearchProps {
+  searchIndex: SearchIndexItem[]
+  materials: MaterialMeta[]
+}
+
+const CATEGORIES: MaterialCategory[] = ['core', 'build', 'ship']
+
+export function MaterialSearch({ searchIndex, materials }: MaterialSearchProps) {
   const [query, setQuery] = useState('')
 
   const fuse = useMemo(
@@ -29,13 +40,17 @@ export function MaterialSearch({ searchIndex }: MaterialSearchProps) {
     [searchIndex]
   )
 
-  const results = useMemo(() => {
-    if (!query.trim()) return []
-    return fuse.search(query).map((r) => r.item)
+  const filteredSlugs = useMemo(() => {
+    if (!query.trim()) return null
+    return new Set(fuse.search(query).map((r) => r.item.slug))
   }, [query, fuse])
 
+  const displayMaterials = filteredSlugs
+    ? materials.filter((m) => filteredSlugs.has(m.slug))
+    : materials
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       <Input
         placeholder="Search materials..."
         value={query}
@@ -43,26 +58,32 @@ export function MaterialSearch({ searchIndex }: MaterialSearchProps) {
         className="max-w-md"
       />
 
-      {query.trim() && (
-        <div>
-          {results.length === 0 ? (
-            <p className="text-sm text-muted">No results found for &ldquo;{query}&rdquo;</p>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {results.map((item) => (
-                <Link key={item.slug} href={`/materials/${item.slug}`}>
-                  <Card hover className="h-full">
-                    <span className="text-xs font-medium text-accent uppercase tracking-wider">
-                      {CATEGORY_LABELS[item.category as MaterialCategory]}
-                    </span>
-                    <h3 className="text-foreground font-semibold mt-2">{item.title}</h3>
-                    <p className="text-sm text-muted mt-1 line-clamp-2">{item.description}</p>
-                  </Card>
-                </Link>
-              ))}
+      {query.trim() && displayMaterials.length === 0 ? (
+        <p className="text-sm text-muted">No results found for &ldquo;{query}&rdquo;</p>
+      ) : (
+        CATEGORIES.map((category) => {
+          const categoryMaterials = displayMaterials.filter((m) => m.category === category)
+          if (categoryMaterials.length === 0) return null
+
+          return (
+            <div key={category}>
+              <h2 className="text-lg font-semibold text-foreground mb-4">
+                {CATEGORY_LABELS[category]}
+              </h2>
+              <div className="grid gap-10 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+                {categoryMaterials.map((material) => (
+                  <Link key={material.slug} href={`/materials/${material.slug}`}>
+                    <FolderCard
+                      title={material.title}
+                      description={material.description}
+                      meta={`${material.readingTime} min read`}
+                    />
+                  </Link>
+                ))}
+              </div>
             </div>
-          )}
-        </div>
+          )
+        })
       )}
     </div>
   )

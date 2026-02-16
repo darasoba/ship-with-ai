@@ -4,6 +4,7 @@ import { getMaterial, getAdjacentMaterials } from '@/lib/materials'
 import { MATERIALS_ORDER } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { TableOfContents } from '@/components/portal/toc'
+import { DownloadMaterial } from '@/components/portal/download-material'
 
 export async function generateStaticParams() {
   return MATERIALS_ORDER.map((m) => ({ slug: m.slug }))
@@ -45,7 +46,14 @@ export default async function MaterialPage({ params }: { params: Promise<{ slug:
         </aside>
 
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">{material.title}</h1>
+          <div className="flex items-start justify-between gap-4 mb-2">
+            <h1 className="text-3xl font-bold text-foreground">{material.title}</h1>
+            <DownloadMaterial
+              title={material.title}
+              slug={material.slug}
+              contentHtml={material.html}
+            />
+          </div>
           <p className="text-muted mb-8">
             {material.readingTime} min read
           </p>
