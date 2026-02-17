@@ -12,7 +12,7 @@ export async function sendSignupEmail({
   signupUrl: string
 }) {
   const { error } = await resend.emails.send({
-    from: 'Ship With AI <onboarding@resend.dev>',
+    from: 'Ship With AI <hello@darasoba.com>',
     to,
     subject: 'Your Ship With AI access is ready',
     html: `
