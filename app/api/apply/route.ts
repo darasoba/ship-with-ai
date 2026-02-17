@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       const session = await createCheckoutSession({
         email: body.email,
         reference: `swai_${application.id}`,
-        successUrl: `${baseUrl}/payment/callback?session_id={CHECKOUT_SESSION_ID}`,
+        successUrl: `${baseUrl}/welcome?session_id={CHECKOUT_SESSION_ID}`,
         cancelUrl: `${baseUrl}/apply`,
         metadata: {
           application_id: application.id,
@@ -94,7 +94,7 @@ export async function POST(request: Request) {
       email: body.email,
       amount: 7_500_000,
       reference,
-      callbackUrl: `${baseUrl}/payment/callback`,
+      callbackUrl: `${baseUrl}/welcome`,
       metadata: {
         application_id: application.id,
         full_name: body.fullName,
