@@ -28,7 +28,7 @@ export async function createCheckoutSession({
       {
         price_data: {
           currency: 'usd',
-          unit_amount: 5500, // $55 USD
+          unit_amount: 5695, // $55 + Stripe processing fee (2.9% + $0.30)
           product_data: {
             name: 'Ship With AI — Cohort Access',
           },

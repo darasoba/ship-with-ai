@@ -92,7 +92,7 @@ export async function POST(request: Request) {
 
     const transaction = await initializeTransaction({
       email: body.email,
-      amount: 7_500_000,
+      amount: 7_624_400, // ₦75,000 + Paystack processing fee (1.5% + ₦100)
       reference,
       callbackUrl: `${baseUrl}/welcome`,
       metadata: {
