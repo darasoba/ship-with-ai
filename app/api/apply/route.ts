@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase/admin'
 import { initializeTransaction, generateReference } from '@/lib/paystack'
+import { createCheckoutSession } from '@/lib/stripe'
+import { getPaymentProvider } from '@/lib/geo'
 
 export async function POST(request: Request) {
   try {
@@ -20,6 +22,9 @@ export async function POST(request: Request) {
       )
     }
 
+    // Detect payment provider based on geo
+    const provider = getPaymentProvider(request)
+
     // Insert application and get the ID back
     const { data: application, error } = await getSupabaseAdmin()
       .from('applications')
@@ -29,6 +34,7 @@ export async function POST(request: Request) {
         current_role: body.role,
         project_description: body.projectIdea,
         referral_source: body.hearAbout || null,
+        payment_provider: provider,
       })
       .select('id')
       .single()
@@ -41,7 +47,34 @@ export async function POST(request: Request) {
       )
     }
 
-    // Generate payment reference and update the application
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+
+    if (provider === 'stripe') {
+      // Stripe flow — $55 USD
+      const session = await createCheckoutSession({
+        email: body.email,
+        reference: `swai_${application.id}`,
+        successUrl: `${baseUrl}/payment/callback?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${baseUrl}/apply`,
+        metadata: {
+          application_id: application.id,
+          full_name: body.fullName,
+        },
+      })
+
+      // Store Stripe session ID as the payment reference
+      await getSupabaseAdmin()
+        .from('applications')
+        .update({ payment_reference: session.id })
+        .eq('id', application.id)
+
+      return NextResponse.json({
+        authorizationUrl: session.url,
+        provider: 'stripe',
+      })
+    }
+
+    // Paystack flow — ₦75,000
     const reference = generateReference()
 
     const { error: updateError } = await getSupabaseAdmin()
@@ -56,9 +89,6 @@ export async function POST(request: Request) {
         { status: 500 }
       )
     }
-
-    // Initialize Paystack transaction (₦75,000 = 7,500,000 kobo)
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
     const transaction = await initializeTransaction({
       email: body.email,
@@ -78,7 +108,10 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json({ authorizationUrl: transaction.authorization_url })
+    return NextResponse.json({
+      authorizationUrl: transaction.authorization_url,
+      provider: 'paystack',
+    })
   } catch (error) {
     console.error('Application API error:', error)
     return NextResponse.json(

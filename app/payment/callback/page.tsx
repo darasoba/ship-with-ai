@@ -15,19 +15,33 @@ function CallbackContent() {
 
   useEffect(() => {
     const reference = searchParams.get('reference') || searchParams.get('trxref')
-    if (!reference) {
+    const sessionId = searchParams.get('session_id')
+
+    if (!reference && !sessionId) {
       setStatus('error')
       setErrorMessage('No payment reference found.')
       return
     }
 
-    async function verify(ref: string) {
+    async function verify() {
       try {
-        const res = await fetch('/api/payment/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ reference: ref }),
-        })
+        let res: Response
+
+        if (sessionId) {
+          // Stripe flow
+          res = await fetch('/api/payment/verify-stripe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId }),
+          })
+        } else {
+          // Paystack flow
+          res = await fetch('/api/payment/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reference }),
+          })
+        }
 
         const data = await res.json()
 
@@ -45,7 +59,7 @@ function CallbackContent() {
       }
     }
 
-    verify(reference)
+    verify()
   }, [searchParams])
 
   if (status === 'verifying') {

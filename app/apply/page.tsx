@@ -92,7 +92,7 @@ export default function ApplyPage() {
         return
       }
 
-      // Redirect to Paystack checkout
+      // Redirect to payment checkout
       if (data.authorizationUrl) {
         window.location.href = data.authorizationUrl
       }
@@ -204,13 +204,13 @@ export default function ApplyPage() {
             )}
 
             <Button type="submit" disabled={submitting} className="w-full">
-              {submitting ? 'Redirecting to payment...' : 'Proceed to Pay — ₦75,000'}
+              {submitting ? 'Redirecting to payment...' : 'Proceed to Pay'}
             </Button>
           </form>
         </Card>
 
         <p className="text-center text-[12px] text-foreground-tertiary mt-6">
-          You&apos;ll be redirected to Paystack to complete payment securely.
+          You&apos;ll be redirected to complete payment securely.
         </p>
       </div>
     </div>
