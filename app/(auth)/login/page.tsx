@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Logo } from '@/components/ui/logo'
 import { createClient } from '@/lib/supabase/client'
 
 function LoginForm() {
@@ -39,10 +40,8 @@ function LoginForm() {
 
   return (
     <div className="w-full max-w-sm space-y-8">
-      <div className="text-center">
-        <Link href="/" className="text-xl font-bold tracking-tight text-foreground">
-          Ship With AI
-        </Link>
+      <div className="flex justify-center">
+        <Link href="/"><Logo className="h-8 w-auto" /></Link>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">

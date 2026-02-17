@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import { Logo } from '@/components/ui/logo'
 
 const ROLE_OPTIONS = [
   'Designer',
@@ -108,7 +109,7 @@ export default function ApplyPage() {
       <div className="max-w-lg mx-auto px-4 py-12 sm:py-20">
         <div className="text-center mb-10">
           <Link href="/" className="inline-block mb-6">
-            <span className="text-[15px] font-semibold text-foreground">Ship With AI</span>
+            <Logo className="h-8 w-auto" />
           </Link>
           <h1 className="text-[28px] md:text-[32px] font-[600] tracking-tight text-foreground">
             Apply to join

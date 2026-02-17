@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import confetti from 'canvas-confetti'
 import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/ui/logo'
 
 type Status = 'verifying' | 'success' | 'error'
 
@@ -144,9 +145,11 @@ function CallbackContent() {
         </svg>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
+        <div className="flex justify-center">
+          <Logo className="h-8 w-auto" />
+        </div>
         <h1 className="text-2xl font-bold text-foreground">You&apos;re in!</h1>
-        <p className="text-lg text-foreground-secondary">Welcome to Ship With AI</p>
       </div>
 
       <div className="bg-foreground/[0.03] border border-foreground/10 rounded-xl p-6 space-y-3">

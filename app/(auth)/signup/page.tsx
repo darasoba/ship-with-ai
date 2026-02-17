@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Logo } from '@/components/ui/logo'
 import { createClient } from '@/lib/supabase/client'
 
 function SignupForm() {
@@ -93,9 +94,9 @@ function SignupForm() {
   if (!token || !tokenValid) {
     return (
       <div className="w-full max-w-sm text-center space-y-4">
-        <Link href="/" className="text-xl font-bold tracking-tight text-foreground">
-          Ship With AI
-        </Link>
+        <div className="flex justify-center">
+          <Link href="/"><Logo className="h-8 w-auto" /></Link>
+        </div>
         <p className="text-red-500 text-sm">
           Invalid or expired invite link.
         </p>
@@ -112,11 +113,11 @@ function SignupForm() {
   return (
     <div className="w-full max-w-sm space-y-8">
       <div className="text-center space-y-2">
-        <Link href="/" className="text-xl font-bold tracking-tight text-foreground">
-          Ship With AI
-        </Link>
+        <div className="flex justify-center">
+          <Link href="/"><Logo className="h-8 w-auto" /></Link>
+        </div>
         <h1 className="text-2xl font-bold text-foreground">
-          Welcome to Ship With AI
+          Welcome aboard
         </h1>
         <p className="text-muted text-sm">
           You&apos;re in. Create your account to access the curriculum and community.

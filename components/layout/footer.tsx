@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Logo } from '@/components/ui/logo'
 
 export function Footer() {
   return (
@@ -6,7 +7,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-16">
         <div className="flex flex-col md:flex-row justify-between gap-8">
           <div>
-            <p className="text-lg font-semibold text-foreground">Ship With AI</p>
+            <Link href="/"><Logo className="h-7 w-auto" /></Link>
             <p className="text-sm text-muted mt-2">
               Build and ship your project in 4 weeks.
             </p>
