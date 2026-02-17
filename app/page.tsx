@@ -179,7 +179,7 @@ export default function Home() {
               <FadeIn delay={350}>
                 <div className="mt-12 flex flex-col items-center gap-5">
                   <Link href="/apply">
-                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55</Button>
+                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55 (&#8358;75,000)</Button>
                   </Link>
                   <p className="text-[13px] text-foreground-tertiary">
                     Next cohort starts March 2026. Limited to 50 spots.
@@ -448,7 +448,7 @@ export default function Home() {
             <FadeIn delay={200}>
               <div className="mt-8">
                 <Link href="/apply">
-                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55</Button>
+                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55 (&#8358;75,000)</Button>
                 </Link>
                 <p className="mt-4 text-[13px] text-foreground-tertiary">
                   Next cohort starts March 2026.
@@ -465,7 +465,7 @@ export default function Home() {
       <div className="fixed bottom-0 left-0 right-0 z-40 p-4 bg-background/90 backdrop-blur-md border-t border-border-subtle md:hidden">
         <Link href="/apply" className="block">
           <Button size="lg" className="w-full">
-            Apply now&nbsp;&mdash;&nbsp;$55
+            Apply now&nbsp;&mdash;&nbsp;$55 (&#8358;75,000)
           </Button>
         </Link>
       </div>
