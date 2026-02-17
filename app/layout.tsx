@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     description:
       "A 4-week mentorship for designers, developers, and product people who want to build real products with AI coding tools.",
     type: "website",
+    images: [{ url: "/og.png", width: 1456, height: 816 }],
   },
   twitter: {
     card: "summary_large_image",
@@ -30,6 +31,7 @@ export const metadata: Metadata = {
     description:
       "Bring your project idea. Ship it in 4 weeks with AI tools and hands-on mentorship.",
     creator: "@darasoba",
+    images: ["/og.png"],
   },
 }
 
