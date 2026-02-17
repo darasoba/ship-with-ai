@@ -11,12 +11,14 @@ function getSecretKey() {
 export async function initializeTransaction({
   email,
   amount,
+  currency,
   reference,
   callbackUrl,
   metadata,
 }: {
   email: string
-  amount: number // in kobo
+  amount: number // in smallest unit (kobo/pesewas/cents)
+  currency?: string
   reference: string
   callbackUrl: string
   metadata?: Record<string, unknown>
@@ -30,6 +32,7 @@ export async function initializeTransaction({
     body: JSON.stringify({
       email,
       amount: String(amount),
+      currency: currency || 'NGN',
       reference,
       callback_url: callbackUrl,
       metadata,
