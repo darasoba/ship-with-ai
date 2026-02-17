@@ -114,9 +114,6 @@ export default function ApplyPage() {
           <h1 className="text-[28px] md:text-[32px] font-[600] tracking-tight text-foreground">
             Apply to join
           </h1>
-          <p className="mt-2 text-[15px] text-foreground-secondary">
-            Takes less than 2 minutes.
-          </p>
         </div>
 
         <Card className="p-6 sm:p-8">
