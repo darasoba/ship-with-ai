@@ -145,10 +145,7 @@ function CallbackContent() {
         </svg>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex justify-center">
-          <Logo className="h-8 w-auto" />
-        </div>
+      <div className="space-y-2">
         <h1 className="text-2xl font-bold text-foreground">You&apos;re in!</h1>
       </div>
 
