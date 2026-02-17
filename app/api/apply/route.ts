@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase/admin'
 import { initializeTransaction, generateReference } from '@/lib/paystack'
 import { createCheckoutSession } from '@/lib/stripe'
-import { getPaymentProvider, getPaystackConfig } from '@/lib/geo'
+import { getPaymentProvider } from '@/lib/geo'
 
 export async function POST(request: Request) {
   try {
@@ -74,8 +74,7 @@ export async function POST(request: Request) {
       })
     }
 
-    // Paystack flow — local currency based on country
-    const paystackConfig = getPaystackConfig(request)
+    // Paystack flow — ₦75,000 NGN (Nigeria only)
     const reference = generateReference()
 
     const { error: updateError } = await getSupabaseAdmin()
@@ -93,8 +92,7 @@ export async function POST(request: Request) {
 
     const transaction = await initializeTransaction({
       email: body.email,
-      amount: paystackConfig.amount,
-      currency: paystackConfig.currency,
+      amount: 7_624_400, // ₦75,000 + 1.5% + ₦100 processing fee
       reference,
       callbackUrl: `${baseUrl}/welcome`,
       metadata: {
