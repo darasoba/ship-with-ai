@@ -1,17 +1,58 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import confetti from 'canvas-confetti'
 import { Button } from '@/components/ui/button'
 
 type Status = 'verifying' | 'success' | 'error'
+
+function fireConfetti() {
+  const duration = 3000
+  const end = Date.now() + duration
+
+  const frame = () => {
+    confetti({
+      particleCount: 3,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0, y: 0.6 },
+      colors: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'],
+    })
+    confetti({
+      particleCount: 3,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1, y: 0.6 },
+      colors: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'],
+    })
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame)
+    }
+  }
+
+  // Big initial burst
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 },
+    colors: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'],
+  })
+
+  frame()
+}
 
 function CallbackContent() {
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<Status>('verifying')
   const [email, setEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+
+  const triggerConfetti = useCallback(() => {
+    fireConfetti()
+  }, [])
 
   useEffect(() => {
     const reference = searchParams.get('reference') || searchParams.get('trxref')
@@ -62,6 +103,12 @@ function CallbackContent() {
     verify()
   }, [searchParams])
 
+  useEffect(() => {
+    if (status === 'success') {
+      triggerConfetti()
+    }
+  }, [status, triggerConfetti])
+
   if (status === 'verifying') {
     return (
       <div className="text-center space-y-4">
@@ -90,16 +137,33 @@ function CallbackContent() {
   }
 
   return (
-    <div className="text-center space-y-4 max-w-sm">
-      <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto">
-        <svg className="w-8 h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div className="text-center space-y-6 max-w-md">
+      <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto">
+        <svg className="w-10 h-10 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
         </svg>
       </div>
-      <h1 className="text-xl font-semibold text-foreground">Payment confirmed!</h1>
-      <p className="text-sm text-foreground-secondary leading-relaxed">
-        Check your email{email ? ` at ${email}` : ''} for your signup link to create your account.
-      </p>
+
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold text-foreground">You&apos;re in!</h1>
+        <p className="text-lg text-foreground-secondary">Welcome to Ship With AI</p>
+      </div>
+
+      <div className="bg-foreground/[0.03] border border-foreground/10 rounded-xl p-6 space-y-3">
+        <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto">
+          <svg className="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <p className="text-sm font-medium text-foreground">Check your email</p>
+        <p className="text-sm text-foreground-secondary leading-relaxed">
+          We&apos;ve sent a signup link to{email ? <span className="font-medium text-foreground"> {email}</span> : ' your email'}. Click it to create your account and access the course dashboard.
+        </p>
+        <p className="text-xs text-foreground-secondary/70">
+          Don&apos;t see it? Check your spam folder. The link expires in 7 days.
+        </p>
+      </div>
+
       <Link href="/">
         <Button variant="secondary" className="mt-2">Back to homepage</Button>
       </Link>
