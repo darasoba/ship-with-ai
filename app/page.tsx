@@ -444,7 +444,7 @@ export default async function Home() {
                     ))}
                   </ul>
                   <Link href="/apply?plan=premium" className="block mt-8">
-                    <Button size="lg" className="w-full bg-[#B8860B] hover:bg-[#9A7209] text-white">
+                    <Button size="lg" className="w-full !border-[#B8860B]" style={{ backgroundColor: '#B8860B', color: '#fff' }}>
                       Apply now
                     </Button>
                   </Link>
