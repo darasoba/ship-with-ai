@@ -75,6 +75,16 @@ async function renderMarkdown(content: string): Promise<string> {
   return result.toString()
 }
 
+export async function renderContentFile(filename: string): Promise<{ html: string; toc: TocItem[] }> {
+  const filePath = path.join(contentDirectory, filename)
+  if (!fs.existsSync(filePath)) throw new Error(`Content file not found: ${filename}`)
+  const fileContents = fs.readFileSync(filePath, 'utf8')
+  const { content } = matter(fileContents)
+  const html = await renderMarkdown(content)
+  const toc = extractToc(html)
+  return { html, toc }
+}
+
 export async function getMaterial(slug: string): Promise<Material | null> {
   const materialInfo = MATERIALS_ORDER.find((m) => m.slug === slug)
   if (!materialInfo) return null
