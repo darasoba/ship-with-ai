@@ -84,6 +84,11 @@ function LoginForm() {
 
       <div className="space-y-3 text-center text-sm">
         <p className="text-muted">
+          <Link href="/forgot-password" className="text-accent hover:underline">
+            Forgot your password?
+          </Link>
+        </p>
+        <p className="text-muted">
           Don&apos;t have an account?{' '}
           <Link href="/apply" className="text-accent hover:underline">
             Apply here
