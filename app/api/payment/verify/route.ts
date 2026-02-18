@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     })
 
     // Send signup email
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ship.darasoba.com'
     const signupUrl = `${baseUrl}/signup?token=${token}`
 
     await sendSignupEmail({

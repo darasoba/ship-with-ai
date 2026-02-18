@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     // Look up the application by payment_reference
     const { data: application } = await getSupabaseAdmin()
       .from('applications')
-      .select('id, email, full_name, status')
+      .select('id, email, full_name, status, plan')
       .eq('payment_reference', sessionId)
       .single()
 
@@ -53,13 +53,14 @@ export async function POST(request: Request) {
     })
 
     // Send signup email
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ship.darasoba.com'
     const signupUrl = `${baseUrl}/signup?token=${token}`
 
     await sendSignupEmail({
       to: application.email,
       fullName: application.full_name,
       signupUrl,
+      plan: application.plan || 'basic',
     })
 
     return NextResponse.json({ received: true })
