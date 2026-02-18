@@ -78,6 +78,7 @@ export async function POST(request: Request) {
       to: application.email,
       fullName: application.full_name,
       signupUrl,
+      plan: application.plan || 'basic',
     })
 
     return NextResponse.json({ success: true, email: application.email, fullName: application.full_name, plan: application.plan || 'basic' })
