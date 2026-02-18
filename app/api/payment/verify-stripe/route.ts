@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     // Look up the application by payment_reference (we store stripe session ID there)
     const { data: application, error: lookupError } = await getSupabaseAdmin()
       .from('applications')
-      .select('id, email, full_name, status')
+      .select('id, email, full_name, status, plan')
       .eq('payment_reference', sessionId)
       .single()
 
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
     // If already processed, return early
     if (application.status === 'paid') {
-      return NextResponse.json({ success: true, alreadyProcessed: true, email: application.email })
+      return NextResponse.json({ success: true, alreadyProcessed: true, email: application.email, fullName: application.full_name, plan: application.plan || 'basic' })
     }
 
     // Verify with Stripe
@@ -52,10 +52,18 @@ export async function POST(request: Request) {
     }
 
     // Update application status
-    await getSupabaseAdmin()
+    const { error: updateError } = await getSupabaseAdmin()
       .from('applications')
       .update({ status: 'paid', paid_at: new Date().toISOString() })
       .eq('id', application.id)
+
+    if (updateError) {
+      console.error('Failed to update application status:', updateError)
+      return NextResponse.json(
+        { error: 'Payment verified but failed to update records. Please contact support.' },
+        { status: 500 }
+      )
+    }
 
     // Generate invite token
     const token = crypto.randomBytes(32).toString('hex')
@@ -79,7 +87,7 @@ export async function POST(request: Request) {
       signupUrl,
     })
 
-    return NextResponse.json({ success: true, email: application.email })
+    return NextResponse.json({ success: true, email: application.email, fullName: application.full_name, plan: application.plan || 'basic' })
   } catch (error) {
     console.error('Stripe verification error:', error)
     return NextResponse.json(

@@ -1,6 +1,53 @@
 // Flip this to true when enrollment is closed
 export const ENROLLMENT_CLOSED = false
 
+// Update this each cohort
+export const COHORT_LABEL = "March '26 Cohort"
+
+export const PLANS = {
+  basic: {
+    name: 'Basic',
+    priceUSD: 55,
+    priceNGN: 75_000,
+    stripeAmount: 5852,
+    paystackAmount: 7_624_400,
+    stripeName: 'Ship With AI — Cohort Access',
+    features: [
+      '4 weeks of mentorship',
+      'Live sessions + recordings',
+      '1-on-1 check-ins',
+      'Full curriculum & templates',
+      'Study materials + 1 year of updates',
+      'Private community',
+    ],
+  },
+  premium: {
+    name: 'Premium',
+    priceUSD: 80,
+    priceNGN: 110_000,
+    stripeAmount: 8470,
+    paystackAmount: 11_175_000,
+    stripeName: 'Ship With AI — Premium Cohort Access',
+    features: [
+      'Everything in Basic',
+      '1hr 30min personal sessions',
+      'Code reviews',
+      '3 weeks post-program support',
+      'Custom starter template',
+      'Priority async support',
+    ],
+  },
+} as const
+
+export type PlanId = keyof typeof PLANS
+
+export function formatPrice(plan: typeof PLANS[PlanId], isNigeria: boolean) {
+  if (isNigeria) {
+    return `₦${plan.priceNGN.toLocaleString()}`
+  }
+  return `$${plan.priceUSD}`
+}
+
 export const MATERIALS_ORDER = [
   {
     slug: 'curriculum',

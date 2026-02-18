@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ENROLLMENT_CLOSED } from '@/lib/constants'
+import { headers } from 'next/headers'
+import { ENROLLMENT_CLOSED, PLANS, formatPrice } from '@/lib/constants'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { FadeIn } from '@/components/landing/fade-in'
@@ -124,7 +125,13 @@ const faqs = [
   },
 ]
 
-export default function Home() {
+export default async function Home() {
+  const headerList = await headers()
+  const isNigeria = headerList.get('x-vercel-ip-country')?.toUpperCase() === 'NG'
+  const basicPrice = formatPrice(PLANS.basic, isNigeria)
+  const premiumPrice = formatPrice(PLANS.premium, isNigeria)
+  const startingPrice = isNigeria ? `₦${PLANS.basic.priceNGN.toLocaleString()}` : `$${PLANS.basic.priceUSD}`
+
   return (
     <>
       <Header />
@@ -179,7 +186,7 @@ export default function Home() {
               <FadeIn delay={350}>
                 <div className="mt-12 flex flex-col items-center gap-5">
                   <Link href="/apply">
-                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55 (&#8358;75,000)</Button>
+                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;from {startingPrice}</Button>
                   </Link>
                   <p className="text-[13px] text-foreground-tertiary">
                     Next cohort starts March 2026. Limited to 50 spots.
@@ -351,60 +358,101 @@ export default function Home() {
 
         {/* ── Pricing ── */}
         <section id="pricing" className="px-6 mt-24 md:mt-[120px]">
-          <div className="max-w-sm mx-auto">
+          <div className="max-w-2xl mx-auto">
             <FadeIn>
-              <Card className="text-center p-8 md:p-10">
-                <p className="text-[13px] font-medium text-foreground-tertiary uppercase tracking-widest">
-                  One-time payment
-                </p>
-                <p className="mt-4 text-[56px] font-bold text-foreground tracking-tight leading-none">
-                  $55
-                </p>
-                <p className="mt-2 text-[15px] text-foreground-tertiary">
-                  ~&#8358;75,000
-                </p>
-                <p className="mt-3 text-[15px] text-foreground-secondary">
-                  Everything included. No upsells.
-                </p>
-                <ul className="mt-8 space-y-2.5 text-left max-w-[240px] mx-auto">
-                  {[
-                    '4 weeks of mentorship',
-                    'Live sessions + recordings',
-                    '1-on-1 check-ins',
-                    'Full curriculum & templates',
-                    'Study materials + 1 year of updates',
-                    'Private community',
-                  ].map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-center gap-3 text-[14px] text-foreground-secondary"
-                    >
-                      <svg
-                        className="w-3.5 h-3.5 text-accent flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+              <h2 className="text-[28px] leading-[34px] md:text-[36px] md:leading-[42px] font-[600] tracking-tight text-foreground text-center mb-12">
+                Simple pricing. Pick your plan.
+              </h2>
+            </FadeIn>
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <FadeIn delay={100}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Basic */}
+                <Card className="text-center p-8 md:p-10 flex flex-col border-accent/40 relative">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
+                    Popular
+                  </span>
+                  <p className="text-[13px] font-medium text-foreground-tertiary uppercase tracking-widest">
+                    {PLANS.basic.name}
+                  </p>
+                  <p className="mt-4 text-[48px] font-bold text-foreground tracking-tight leading-none">
+                    {basicPrice}
+                  </p>
+                  <ul className="mt-8 space-y-2.5 text-left mx-auto flex-1">
+                    {PLANS.basic.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-center gap-3 text-[14px] text-foreground-secondary"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2.5}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/apply" className="block mt-8">
-                  <Button size="lg" className="w-full">
-                    Apply now
-                  </Button>
-                </Link>
-                <p className="mt-4 text-[13px] text-foreground-tertiary">
-                  Full refund after Week 1. No questions.
-                </p>
-              </Card>
+                        <svg
+                          className="w-3.5 h-3.5 text-accent flex-shrink-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2.5}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/apply?plan=basic" className="block mt-8">
+                    <Button size="lg" className="w-full">
+                      Apply now
+                    </Button>
+                  </Link>
+                </Card>
+
+                {/* Premium */}
+                <Card className="text-center p-8 md:p-10 flex flex-col border-[#D4A847]/40 relative bg-gradient-to-b from-[#FDF8EC] to-surface dark:from-[#1F1B0F] dark:to-surface">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Image src="/prem.svg" alt="Premium" width={28} height={28} />
+                  </span>
+                  <p className="text-[13px] font-medium text-[#B8860B] uppercase tracking-widest">
+                    {PLANS.premium.name}
+                  </p>
+                  <p className="mt-4 text-[48px] font-bold text-foreground tracking-tight leading-none">
+                    {premiumPrice}
+                  </p>
+                  <ul className="mt-8 space-y-2.5 text-left mx-auto flex-1">
+                    {PLANS.premium.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-center gap-3 text-[14px] text-foreground-secondary"
+                      >
+                        <svg
+                          className="w-3.5 h-3.5 text-[#D4A847] flex-shrink-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2.5}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/apply?plan=premium" className="block mt-8">
+                    <Button size="lg" className="w-full bg-[#B8860B] hover:bg-[#9A7209] text-white">
+                      Apply now
+                    </Button>
+                  </Link>
+                </Card>
+              </div>
+              <p className="mt-6 text-center text-[13px] text-foreground-tertiary">
+                One-time payment.
+              </p>
             </FadeIn>
           </div>
         </section>
@@ -448,7 +496,7 @@ export default function Home() {
             <FadeIn delay={200}>
               <div className="mt-8">
                 <Link href="/apply">
-                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;$55 (&#8358;75,000)</Button>
+                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;from {startingPrice}</Button>
                 </Link>
                 <p className="mt-4 text-[13px] text-foreground-tertiary">
                   Next cohort starts March 2026.
@@ -465,7 +513,7 @@ export default function Home() {
       <div className="fixed bottom-0 left-0 right-0 z-40 p-4 bg-background/90 backdrop-blur-md border-t border-border-subtle md:hidden">
         <Link href="/apply" className="block">
           <Button size="lg" className="w-full">
-            Apply now&nbsp;&mdash;&nbsp;$55 (&#8358;75,000)
+            Apply now&nbsp;&mdash;&nbsp;from {startingPrice}
           </Button>
         </Link>
       </div>

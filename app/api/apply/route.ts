@@ -3,9 +3,17 @@ import { getSupabaseAdmin } from '@/lib/supabase/admin'
 import { initializeTransaction, generateReference } from '@/lib/paystack'
 import { createCheckoutSession } from '@/lib/stripe'
 import { getPaymentProvider } from '@/lib/geo'
+import { PLANS, type PlanId, ENROLLMENT_CLOSED } from '@/lib/constants'
 
 export async function POST(request: Request) {
   try {
+    if (ENROLLMENT_CLOSED) {
+      return NextResponse.json(
+        { error: 'Enrollment is currently closed.' },
+        { status: 403 }
+      )
+    }
+
     const body = await request.json()
 
     if (!body.fullName?.trim() || !body.email?.trim() || !body.role || !body.projectIdea?.trim()) {
@@ -22,6 +30,9 @@ export async function POST(request: Request) {
       )
     }
 
+    const planId: PlanId = body.plan === 'premium' ? 'premium' : 'basic'
+    const plan = PLANS[planId]
+
     // Detect payment provider based on geo
     const provider = getPaymentProvider(request)
 
@@ -35,6 +46,7 @@ export async function POST(request: Request) {
         project_description: body.projectIdea,
         referral_source: body.hearAbout || null,
         payment_provider: provider,
+        plan: planId,
       })
       .select('id')
       .single()
@@ -50,15 +62,17 @@ export async function POST(request: Request) {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
     if (provider === 'stripe') {
-      // Stripe flow — $55 USD
       const session = await createCheckoutSession({
         email: body.email,
         reference: `swai_${application.id}`,
+        amount: plan.stripeAmount,
+        productName: plan.stripeName,
         successUrl: `${baseUrl}/welcome?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${baseUrl}/apply`,
+        cancelUrl: `${baseUrl}/apply?plan=${planId}`,
         metadata: {
           application_id: application.id,
           full_name: body.fullName,
+          plan: planId,
         },
       })
 
@@ -74,7 +88,7 @@ export async function POST(request: Request) {
       })
     }
 
-    // Paystack flow — ₦75,000 NGN (Nigeria only)
+    // Paystack flow
     const reference = generateReference()
 
     const { error: updateError } = await getSupabaseAdmin()
@@ -92,12 +106,13 @@ export async function POST(request: Request) {
 
     const transaction = await initializeTransaction({
       email: body.email,
-      amount: 7_624_400, // ₦75,000 + 1.5% + ₦100 processing fee
+      amount: plan.paystackAmount,
       reference,
       callbackUrl: `${baseUrl}/welcome`,
       metadata: {
         application_id: application.id,
         full_name: body.fullName,
+        plan: planId,
         custom_fields: [
           {
             display_name: 'Full Name',

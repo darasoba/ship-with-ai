@@ -1,61 +1,104 @@
 'use client'
 
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import confetti from 'canvas-confetti'
+import html2canvas from 'html2canvas'
 import { Button } from '@/components/ui/button'
-import { Logo } from '@/components/ui/logo'
+import { COHORT_LABEL } from '@/lib/constants'
 
 type Status = 'verifying' | 'success' | 'error'
 
-function fireConfetti() {
-  const duration = 3000
-  const end = Date.now() + duration
+const CARD_FILTERS = [
+  'none',                // Original warm cream
+  'hue-rotate(160deg)',  // Cool blue
+  'hue-rotate(270deg)',  // Rose / pink
+]
 
-  const frame = () => {
-    confetti({
-      particleCount: 3,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0, y: 0.6 },
-      colors: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'],
-    })
-    confetti({
-      particleCount: 3,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1, y: 0.6 },
-      colors: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'],
-    })
-
-    if (Date.now() < end) {
-      requestAnimationFrame(frame)
-    }
+function getCardFilter(name: string, plan: string): string {
+  if (plan === 'premium') return 'none'
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = ((hash << 5) - hash) + name.charCodeAt(i)
+    hash |= 0
   }
+  return CARD_FILTERS[Math.abs(hash) % CARD_FILTERS.length]
+}
 
-  // Big initial burst
+function fireConfetti() {
   confetti({
     particleCount: 100,
-    spread: 70,
+    spread: 60,
     origin: { y: 0.6 },
     colors: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'],
+    gravity: 1.2,
+    ticks: 150,
   })
-
-  frame()
 }
 
 function CallbackContent() {
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<Status>('verifying')
   const [email, setEmail] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [plan, setPlan] = useState<string>('basic')
   const [errorMessage, setErrorMessage] = useState('')
+
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const triggerConfetti = useCallback(() => {
     fireConfetti()
   }, [])
 
+  const handleDownloadCard = useCallback(async () => {
+    if (!cardRef.current) return
+    try {
+      const raw = await html2canvas(cardRef.current, {
+        scale: 4,
+        useCORS: true,
+        backgroundColor: null,
+      })
+
+      // Re-apply the CSS filter that html2canvas doesn't capture
+      const cssFilter = getCardFilter(fullName, plan)
+      if (cssFilter === 'none') {
+        const link = document.createElement('a')
+        link.download = 'ship-with-ai-card.png'
+        link.href = raw.toDataURL('image/png')
+        link.click()
+        return
+      }
+
+      const filtered = document.createElement('canvas')
+      filtered.width = raw.width
+      filtered.height = raw.height
+      const ctx = filtered.getContext('2d')!
+      ctx.filter = cssFilter
+      ctx.drawImage(raw, 0, 0)
+
+      const link = document.createElement('a')
+      link.download = 'ship-with-ai-card.png'
+      link.href = filtered.toDataURL('image/png')
+      link.click()
+    } catch (err) {
+      console.error('Failed to download card:', err)
+    }
+  }, [fullName, plan])
+
   useEffect(() => {
+    // Preview mode for testing — use ?preview=true&variant=0|1|2 to force a color
+    if (searchParams.get('preview') === 'true') {
+      const v = searchParams.get('variant')
+      const names = ['Tolu Ade', 'Dára Sobaloju', 'Jesudamimola Olorunnimomo']
+      const name = v != null ? (names[Number(v)] || names[0]) : names[0]
+      setStatus('success')
+      setFullName(name)
+      setEmail('dara@example.com')
+      setPlan(searchParams.get('plan') || 'basic')
+      return
+    }
+
     const reference = searchParams.get('reference') || searchParams.get('trxref')
     const sessionId = searchParams.get('session_id')
 
@@ -95,6 +138,8 @@ function CallbackContent() {
 
         setStatus('success')
         setEmail(data.email || '')
+        setFullName(data.fullName || '')
+        setPlan(data.plan || 'basic')
       } catch {
         setStatus('error')
         setErrorMessage('Network error. Please try again.')
@@ -138,42 +183,116 @@ function CallbackContent() {
   }
 
   return (
-    <div className="text-center space-y-6 max-w-md">
-      <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto">
-        <svg className="w-10 h-10 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-
-      <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-foreground">You&apos;re in!</h1>
-      </div>
-
-      <div className="bg-foreground/[0.03] border border-foreground/10 rounded-xl p-6 space-y-3">
-        <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto">
-          <svg className="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    <div className="w-full max-w-4xl mx-auto px-6">
+      {/* Centered header */}
+      <div className="flex flex-col items-center gap-3 mb-10 md:mb-14">
+        <div className="w-12 h-12 rounded-full bg-emerald-500/15 flex items-center justify-center">
+          <svg className="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <p className="text-sm font-medium text-foreground">Check your email</p>
-        <p className="text-sm text-foreground-secondary leading-relaxed">
-          We&apos;ve sent a signup link to{email ? <span className="font-medium text-foreground"> {email}</span> : ' your email'}. Click it to create your account and access the course dashboard.
-        </p>
-        <p className="text-xs text-foreground-secondary/70">
-          Don&apos;t see it? Check your spam folder. The link expires in 7 days.
-        </p>
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+          You&apos;re in!
+        </h1>
       </div>
 
-      <Link href="/">
-        <Button variant="secondary" className="mt-2">Back to homepage</Button>
-      </Link>
+      {/* Two-column: card left, text right */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-10 md:gap-16 items-center max-w-3xl mx-auto">
+        {/* Left — illustration (untouched) */}
+        <div className="mx-auto w-full max-w-[300px] md:max-w-none">
+          <div
+            ref={cardRef}
+            className="relative w-full overflow-hidden rounded-lg"
+            style={{ aspectRatio: '784 / 931', filter: getCardFilter(fullName, plan) }}
+          >
+            <img
+              src={plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'}
+              alt=""
+              className="absolute inset-0 w-full h-full"
+            />
+            {/* Dynamic name + cohort overlay */}
+            <div
+              className="absolute flex flex-col justify-start"
+              style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
+            >
+              <p
+                className="font-semibold text-black text-left w-full uppercase line-clamp-2"
+                style={{
+                  fontSize: 'clamp(0.75rem, 4vw, 1.4rem)',
+                  transform: 'rotate(-1.75deg)',
+                  lineHeight: 1.2,
+                  fontFamily: 'Inter, sans-serif',
+                }}
+              >
+                {fullName || 'Cohort Member'}
+              </p>
+              <p
+                className="font-medium text-left w-full"
+                style={{
+                  fontSize: 'clamp(0.45rem, 2.2vw, 0.8rem)',
+                  transform: 'rotate(-1.75deg)',
+                  lineHeight: 1.1,
+                  fontFamily: 'Inter, sans-serif',
+                  color: 'rgba(0,0,0,0.52)',
+                  marginTop: '4%',
+                }}
+              >
+                {COHORT_LABEL}{plan === 'premium' ? ' · Premium' : ''}
+              </p>
+            </div>
+          </div>
+
+          {/* Download — lives under card */}
+          <button
+            onClick={handleDownloadCard}
+            className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 text-xs font-medium text-foreground-secondary hover:text-foreground transition-colors cursor-pointer"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download card
+          </button>
+        </div>
+
+        {/* Right — text directly on bg, no card */}
+        <div className="space-y-6 text-left">
+          <div>
+            <p className="text-[11px] font-semibold text-foreground-tertiary uppercase tracking-[0.15em] mb-2">
+              Next step
+            </p>
+            <h2 className="text-xl font-semibold text-foreground tracking-tight">
+              Check your email
+            </h2>
+            <p className="text-[15px] text-foreground-secondary mt-3 leading-relaxed">
+              We sent a signup link to
+              {email
+                ? <span className="font-medium text-foreground"> {email}</span>
+                : ' your email'
+              }. Click it to complete your registration.
+            </p>
+            <p className="text-[13px] text-foreground-tertiary mt-2">
+              The link expires in 7 days.
+            </p>
+          </div>
+
+          <div className="w-8 h-px bg-foreground/10" />
+
+          <p className="text-[13px] text-foreground-tertiary leading-relaxed">
+            Share your card on socials and let people know you&apos;re shipping with AI this cohort.
+          </p>
+
+          <Link href="/starter-pack">
+            <Button variant="secondary" size="sm">View starter pack</Button>
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
 
 export default function PaymentCallbackPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center py-16 px-4">
       <Suspense
         fallback={
           <div className="text-center space-y-4">

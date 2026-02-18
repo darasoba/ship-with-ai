@@ -9,12 +9,16 @@ function getStripe() {
 export async function createCheckoutSession({
   email,
   reference,
+  amount,
+  productName,
   successUrl,
   cancelUrl,
   metadata,
 }: {
   email: string
   reference: string
+  amount: number
+  productName: string
   successUrl: string
   cancelUrl: string
   metadata?: Record<string, string>
@@ -28,9 +32,9 @@ export async function createCheckoutSession({
       {
         price_data: {
           currency: 'usd',
-          unit_amount: 5852, // $55 + Stripe processing fee (5.5% + $0.30 for international cards)
+          unit_amount: amount,
           product_data: {
-            name: 'Ship With AI — Cohort Access',
+            name: productName,
           },
         },
         quantity: 1,
