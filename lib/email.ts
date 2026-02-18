@@ -13,7 +13,7 @@ export async function sendSignupEmail({
   signupUrl: string
   plan?: string
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://shipwithai.com'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ship.darasoba.com'
   const cardImage = plan === 'premium'
     ? `${baseUrl}/card/card-bg-premium.svg`
     : `${baseUrl}/card/card-bg.svg`
