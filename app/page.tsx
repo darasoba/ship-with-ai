@@ -185,8 +185,8 @@ export default async function Home() {
               </FadeIn>
               <FadeIn delay={350}>
                 <div className="mt-12 flex flex-col items-center gap-5">
-                  <Link href="/apply">
-                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;from {startingPrice}</Button>
+                  <Link href="/apply?plan=basic">
+                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;{startingPrice}</Button>
                   </Link>
                   <p className="text-[13px] text-foreground-tertiary">
                     Next cohort starts March 2026. Limited to 50 spots.
@@ -495,8 +495,8 @@ export default async function Home() {
             </FadeIn>
             <FadeIn delay={200}>
               <div className="mt-8">
-                <Link href="/apply">
-                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;from {startingPrice}</Button>
+                <Link href="/apply?plan=basic">
+                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;{startingPrice}</Button>
                 </Link>
                 <p className="mt-4 text-[13px] text-foreground-tertiary">
                   Next cohort starts March 2026.
@@ -511,9 +511,9 @@ export default async function Home() {
 
       {/* Floating mobile CTA */}
       <div className="fixed bottom-0 left-0 right-0 z-40 p-4 bg-background/90 backdrop-blur-md border-t border-border-subtle md:hidden">
-        <Link href="/apply" className="block">
+        <Link href="/apply?plan=basic" className="block">
           <Button size="lg" className="w-full">
-            Apply now&nbsp;&mdash;&nbsp;from {startingPrice}
+            Apply now&nbsp;&mdash;&nbsp;{startingPrice}
           </Button>
         </Link>
       </div>
