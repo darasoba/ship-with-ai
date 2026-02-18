@@ -410,7 +410,7 @@ export default async function Home() {
                 </Card>
 
                 {/* Premium */}
-                <Card className="text-center p-8 md:p-10 flex flex-col border-[#D4A847]/40 relative bg-gradient-to-b from-[#FDF8EC] to-surface dark:from-[#1F1B0F] dark:to-surface">
+                <Card className="text-center p-8 md:p-10 flex flex-col border-[#D4A847]/40 relative" style={{ background: 'linear-gradient(to bottom, var(--premium-from), var(--premium-to))' }}>
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2">
                     <Image src="/prem.svg" alt="Premium" width={28} height={28} />
                   </span>

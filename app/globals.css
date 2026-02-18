@@ -19,6 +19,9 @@
   --accent-hover: #1D4ED8;
   --accent-subtle: rgba(37, 99, 235, 0.08);
 
+  --premium-from: #FDF8EC;
+  --premium-to: #FBF3E0;
+
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -38,6 +41,9 @@
     --accent: #3B82F6;
     --accent-hover: #2563EB;
     --accent-subtle: rgba(59, 130, 246, 0.08);
+
+    --premium-from: #191307;
+    --premium-to: #1A1A19;
   }
 }
 
