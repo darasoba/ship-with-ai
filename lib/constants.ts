@@ -8,9 +8,9 @@ export const PLANS = {
   basic: {
     name: 'Basic',
     priceUSD: 55,
-    priceNGN: 75_000,
+    priceNGN: 50_000,
     stripeAmount: 5852,
-    paystackAmount: 7_624_400,
+    paystackAmount: 5_086_300,
     stripeName: 'Ship With AI — Cohort Access',
     features: [
       '4 weeks of mentorship',
