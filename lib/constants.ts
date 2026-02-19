@@ -2,18 +2,34 @@
 export const ENROLLMENT_CLOSED = false
 
 // Set to false to hide premium plan and show single-plan pricing
-export const SHOW_PREMIUM_PLAN = false
+export const SHOW_PREMIUM_PLAN = true
 
 // Update this each cohort
 export const COHORT_LABEL = "March '26 Cohort"
 
+// Prices from env vars (change on Vercel, redeploy to update)
+const basicUSD = Number(process.env.NEXT_PUBLIC_BASIC_PRICE_USD) || 55
+const basicNGN = Number(process.env.NEXT_PUBLIC_BASIC_PRICE_NGN) || 75_000
+const premiumUSD = Number(process.env.NEXT_PUBLIC_PREMIUM_PRICE_USD) || 80
+const premiumNGN = Number(process.env.NEXT_PUBLIC_PREMIUM_PRICE_NGN) || 110_000
+
+// Fee-inclusive amounts for payment gateways
+// Stripe: (price + $0.30) / (1 - 0.055) → cents
+// Paystack: (price + ₦100) / (1 - 0.015) → kobo
+function stripeAmount(usd: number) {
+  return Math.round(((usd + 0.30) / (1 - 0.055)) * 100)
+}
+function paystackAmount(ngn: number) {
+  return Math.round(((ngn + 100) / (1 - 0.015)) * 100)
+}
+
 export const PLANS = {
   basic: {
     name: 'Basic',
-    priceUSD: 55,
-    priceNGN: 75_000,
-    stripeAmount: 5852,
-    paystackAmount: 7_624_400,
+    priceUSD: basicUSD,
+    priceNGN: basicNGN,
+    stripeAmount: stripeAmount(basicUSD),
+    paystackAmount: paystackAmount(basicNGN),
     stripeName: 'Ship With AI — Cohort Access',
     features: [
       '4 weeks of mentorship',
@@ -26,10 +42,10 @@ export const PLANS = {
   },
   premium: {
     name: 'Premium',
-    priceUSD: 80,
-    priceNGN: 110_000,
-    stripeAmount: 8470,
-    paystackAmount: 11_175_000,
+    priceUSD: premiumUSD,
+    priceNGN: premiumNGN,
+    stripeAmount: stripeAmount(premiumUSD),
+    paystackAmount: paystackAmount(premiumNGN),
     stripeName: 'Ship With AI — Premium Cohort Access',
     features: [
       'Everything in Basic',
@@ -40,11 +56,11 @@ export const PLANS = {
       'Priority async support',
     ],
   },
-} as const
+}
 
 export type PlanId = keyof typeof PLANS
 
-export function formatPrice(plan: typeof PLANS[PlanId], isNigeria: boolean) {
+export function formatPrice(plan: { priceUSD: number; priceNGN: number }, isNigeria: boolean) {
   if (isNigeria) {
     return `₦${plan.priceNGN.toLocaleString()}`
   }
