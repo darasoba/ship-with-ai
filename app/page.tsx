@@ -365,7 +365,7 @@ export default async function Home() {
               </h2>
             </FadeIn>
           </div>
-          <div className={SHOW_PREMIUM_PLAN ? 'max-w-2xl mx-auto' : 'max-w-md mx-auto'}>
+          <div className={SHOW_PREMIUM_PLAN ? 'max-w-2xl mx-auto' : 'max-w-sm mx-auto'}>
             <FadeIn delay={100}>
               <div className={SHOW_PREMIUM_PLAN ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : ''}>
                 {/* Basic */}
