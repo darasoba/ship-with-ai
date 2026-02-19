@@ -46,6 +46,17 @@ function CallbackContent() {
   const [errorMessage, setErrorMessage] = useState('')
 
   const cardRef = useRef<HTMLDivElement>(null)
+  const [cardWidth, setCardWidth] = useState(300)
+
+  useEffect(() => {
+    if (!cardRef.current) return
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) setCardWidth(entry.contentRect.width)
+    })
+    observer.observe(cardRef.current)
+    setCardWidth(cardRef.current.offsetWidth)
+    return () => observer.disconnect()
+  }, [status])
 
   const triggerConfetti = useCallback(() => {
     fireConfetti()
@@ -216,12 +227,15 @@ function CallbackContent() {
               style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
             >
               <p
-                className="font-semibold text-black text-left w-full uppercase line-clamp-2"
+                className="font-semibold text-black text-left w-full uppercase"
                 style={{
-                  fontSize: 'clamp(0.75rem, 4vw, 1.4rem)',
+                  fontSize: `${cardWidth * 0.055}px`,
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.2,
                   fontFamily: 'Inter, sans-serif',
+                  overflow: 'hidden',
+                  maxHeight: `${cardWidth * 0.055 * 1.2 * 2}px`,
+                  wordBreak: 'break-word',
                 }}
               >
                 {fullName || 'Cohort Member'}
@@ -229,7 +243,7 @@ function CallbackContent() {
               <p
                 className="font-medium text-left w-full"
                 style={{
-                  fontSize: 'clamp(0.45rem, 2.2vw, 0.8rem)',
+                  fontSize: `${cardWidth * 0.03}px`,
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.1,
                   fontFamily: 'Inter, sans-serif',
