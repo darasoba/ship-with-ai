@@ -148,9 +148,8 @@ function CallbackContent() {
     // Preview mode for testing — use ?preview=true&variant=0|1|2 to force a color
     if (searchParams.get('preview') === 'true') {
       const v = searchParams.get('variant')
-      const customName = searchParams.get('name')
       const names = ['Tolu Ade', 'Dára Sobaloju', 'Jesudamimola Olorunnimomo']
-      const name = customName || (v != null ? (names[Number(v)] || names[0]) : names[0])
+      const name = v != null ? (names[Number(v)] || names[0]) : names[0]
       setStatus('success')
       setFullName(name)
       setEmail('dara@example.com')
