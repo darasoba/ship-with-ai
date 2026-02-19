@@ -46,51 +46,100 @@ function CallbackContent() {
   const [errorMessage, setErrorMessage] = useState('')
 
   const cardRef = useRef<HTMLDivElement>(null)
-  const [cardWidth, setCardWidth] = useState(300)
-
-  useEffect(() => {
-    if (!cardRef.current) return
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) setCardWidth(entry.contentRect.width)
-    })
-    observer.observe(cardRef.current)
-    setCardWidth(cardRef.current.offsetWidth)
-    return () => observer.disconnect()
-  }, [status])
+  const textOverlayRef = useRef<HTMLDivElement>(null)
 
   const triggerConfetti = useCallback(() => {
     fireConfetti()
   }, [])
 
   const handleDownloadCard = useCallback(async () => {
-    if (!cardRef.current) return
+    if (!cardRef.current || !textOverlayRef.current) return
     try {
+      // Hide the HTML text overlay so html2canvas only captures the background
+      textOverlayRef.current.style.visibility = 'hidden'
+
       const raw = await html2canvas(cardRef.current, {
         scale: 4,
         useCORS: true,
         backgroundColor: null,
       })
 
-      // Re-apply the CSS filter that html2canvas doesn't capture
+      // Restore the text overlay
+      textOverlayRef.current.style.visibility = 'visible'
+
+      const W = raw.width
+      const H = raw.height
+
+      // Create final canvas and draw the background
+      const final = document.createElement('canvas')
+      final.width = W
+      final.height = H
+      const ctx = final.getContext('2d')!
+
+      // Apply CSS filter if needed
       const cssFilter = getCardFilter(fullName, plan)
-      if (cssFilter === 'none') {
-        const link = document.createElement('a')
-        link.download = 'ship-with-ai-card.png'
-        link.href = raw.toDataURL('image/png')
-        link.click()
-        return
+      if (cssFilter !== 'none') ctx.filter = cssFilter
+      ctx.drawImage(raw, 0, 0)
+      ctx.filter = 'none'
+
+      // Draw text directly on canvas (matches the overlay position)
+      const name = (fullName || 'Cohort Member').toUpperCase()
+      const cohort = `${COHORT_LABEL}${plan === 'premium' ? ' · Premium' : ''}`
+
+      const textX = W * 0.13
+      const textY = W * 0.055 + H * 0.25  // top + paddingTop + baseline offset
+      const maxW = W * 0.58
+
+      // Name — bold, sized to fit in max 2 lines
+      let nameFontSize = W * 0.055
+      ctx.font = `700 ${nameFontSize}px Inter, sans-serif`
+      // Shrink font if a single word is wider than the box
+      while (ctx.measureText(name.split(' ').sort((a, b) => b.length - a.length)[0] || name).width > maxW && nameFontSize > W * 0.03) {
+        nameFontSize -= 1
+        ctx.font = `700 ${nameFontSize}px Inter, sans-serif`
       }
 
-      const filtered = document.createElement('canvas')
-      filtered.width = raw.width
-      filtered.height = raw.height
-      const ctx = filtered.getContext('2d')!
-      ctx.filter = cssFilter
-      ctx.drawImage(raw, 0, 0)
+      // Word-wrap name into lines (max 2)
+      const words = name.split(' ')
+      const lines: string[] = []
+      let currentLine = ''
+      for (const word of words) {
+        const test = currentLine ? `${currentLine} ${word}` : word
+        if (ctx.measureText(test).width > maxW && currentLine) {
+          lines.push(currentLine)
+          currentLine = word
+        } else {
+          currentLine = test
+        }
+      }
+      if (currentLine) lines.push(currentLine)
+      const nameLines = lines.slice(0, 2) // max 2 lines
+
+      // Apply slight rotation to match CSS transform
+      ctx.save()
+      ctx.translate(textX, textY)
+      ctx.rotate(-1.75 * Math.PI / 180)
+
+      ctx.fillStyle = '#000000'
+      ctx.textBaseline = 'top'
+      const lineHeight = nameFontSize * 1.2
+      nameLines.forEach((line, i) => {
+        ctx.font = `700 ${nameFontSize}px Inter, sans-serif`
+        ctx.fillText(line, 0, i * lineHeight)
+      })
+
+      // Cohort label
+      const cohortY = nameLines.length * lineHeight + nameFontSize * 0.5
+      const cohortFontSize = W * 0.03
+      ctx.font = `500 ${cohortFontSize}px Inter, sans-serif`
+      ctx.fillStyle = 'rgba(0,0,0,0.52)'
+      ctx.fillText(cohort, 0, cohortY)
+
+      ctx.restore()
 
       const link = document.createElement('a')
       link.download = 'ship-with-ai-card.png'
-      link.href = filtered.toDataURL('image/png')
+      link.href = final.toDataURL('image/png')
       link.click()
     } catch (err) {
       console.error('Failed to download card:', err)
@@ -223,19 +272,17 @@ function CallbackContent() {
             />
             {/* Dynamic name + cohort overlay */}
             <div
+              ref={textOverlayRef}
               className="absolute flex flex-col justify-start"
-              style={{ left: '13%', top: '23%', width: '60%', height: '25%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
+              style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
             >
               <p
-                className="font-semibold text-black text-left w-full uppercase"
+                className="font-semibold text-black text-left w-full uppercase line-clamp-2"
                 style={{
-                  fontSize: `${cardWidth * (fullName.length > 20 ? 0.043 : 0.055)}px`,
+                  fontSize: 'clamp(0.75rem, 4vw, 1.4rem)',
                   transform: 'rotate(-1.75deg)',
-                  lineHeight: 1.15,
+                  lineHeight: 1.2,
                   fontFamily: 'Inter, sans-serif',
-                  overflow: 'hidden',
-                  maxHeight: `${cardWidth * (fullName.length > 20 ? 0.043 : 0.055) * 1.15 * 2}px`,
-                  wordBreak: 'break-word',
                 }}
               >
                 {fullName || 'Cohort Member'}
@@ -243,12 +290,12 @@ function CallbackContent() {
               <p
                 className="font-medium text-left w-full"
                 style={{
-                  fontSize: `${cardWidth * 0.028}px`,
+                  fontSize: 'clamp(0.45rem, 2.2vw, 0.8rem)',
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.1,
                   fontFamily: 'Inter, sans-serif',
                   color: 'rgba(0,0,0,0.52)',
-                  marginTop: '3%',
+                  marginTop: '4%',
                 }}
               >
                 {COHORT_LABEL}{plan === 'premium' ? ' · Premium' : ''}
