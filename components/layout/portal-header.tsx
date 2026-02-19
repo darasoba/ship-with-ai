@@ -8,9 +8,10 @@ import { Logo } from '@/components/ui/logo'
 
 interface PortalHeaderProps {
   userName?: string
+  plan?: string
 }
 
-export function PortalHeader({ userName }: PortalHeaderProps) {
+export function PortalHeader({ userName, plan }: PortalHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const router = useRouter()
@@ -72,6 +73,11 @@ export function PortalHeader({ userName }: PortalHeaderProps) {
               {initials}
             </div>
             <span>{userName || 'Student'}</span>
+            {plan === 'premium' && (
+              <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r from-amber-500/15 to-orange-500/15 text-amber-600 dark:text-amber-400 rounded-full">
+                Premium
+              </span>
+            )}
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
@@ -117,6 +123,14 @@ export function PortalHeader({ userName }: PortalHeaderProps) {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-border bg-background px-6 py-4 space-y-3">
+          {plan === 'premium' && (
+            <div className="flex items-center gap-2 pb-2 mb-1 border-b border-border">
+              <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r from-amber-500/15 to-orange-500/15 text-amber-600 dark:text-amber-400 rounded-full">
+                Premium
+              </span>
+              <span className="text-xs text-muted">{userName}</span>
+            </div>
+          )}
           <button
             onClick={() => {
               setMobileOpen(false)

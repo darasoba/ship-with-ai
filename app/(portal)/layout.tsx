@@ -12,6 +12,7 @@ export default async function PortalLayout({
   children: React.ReactNode
 }) {
   let userName = 'Student'
+  let userPlan = 'basic'
 
   if (hasSupabase) {
     const { createClient } = await import('@/lib/supabase/server')
@@ -24,16 +25,17 @@ export default async function PortalLayout({
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('full_name')
+      .select('full_name, plan')
       .eq('id', user.id)
       .single()
 
     userName = profile?.full_name || user.email?.split('@')[0] || 'Student'
+    userPlan = profile?.plan || 'basic'
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <PortalHeader userName={userName} />
+      <PortalHeader userName={userName} plan={userPlan} />
       <CommandPalette />
       <main>{children}</main>
     </div>

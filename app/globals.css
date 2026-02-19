@@ -60,6 +60,8 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-subtle: var(--accent-subtle);
+  --color-premium-from: var(--premium-from);
+  --color-premium-to: var(--premium-to);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

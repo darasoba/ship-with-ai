@@ -1,8 +1,9 @@
-import { MATERIALS_ORDER, WEEK_CONFIG } from '@/lib/constants'
+import { MATERIALS_ORDER, WEEK_CONFIG, COHORT_LABEL } from '@/lib/constants'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { FolderCard } from '@/components/ui/folder-card'
 import { DashboardProgress } from './dashboard-progress'
+import { BadgeCard } from './badge-card'
 
 const hasSupabase =
   process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
@@ -14,7 +15,9 @@ export const metadata = {
 
 export default async function DashboardPage() {
   let firstName = 'there'
+  let fullName = ''
   let cohort = 1
+  let plan = 'basic'
   let continueSlug = 'curriculum'
 
   if (hasSupabase) {
@@ -25,7 +28,7 @@ export default async function DashboardPage() {
     if (user) {
       const { data: profile } = await supabase
         .from('profiles')
-        .select('full_name, cohort')
+        .select('full_name, cohort, plan')
         .eq('id', user.id)
         .single()
 
@@ -38,7 +41,9 @@ export default async function DashboardPage() {
         .single()
 
       firstName = profile?.full_name?.split(' ')[0] || 'there'
+      fullName = profile?.full_name || ''
       cohort = profile?.cohort || 1
+      plan = profile?.plan || 'basic'
       continueSlug = lastRead?.material_slug || 'curriculum'
     }
   }
@@ -62,8 +67,16 @@ export default async function DashboardPage() {
         <h1 className="text-2xl font-bold text-foreground">
           Welcome back, {firstName}.
         </h1>
-        <p className="text-muted mt-1">
-          Cohort {cohort} &middot; Week {currentWeek}
+        <p className="text-muted mt-1 flex items-center gap-2">
+          <span>Cohort {cohort} &middot; Week {currentWeek}</span>
+          {plan === 'premium' && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r from-amber-500/15 to-orange-500/15 text-amber-600 dark:text-amber-400 rounded-full">
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              Premium
+            </span>
+          )}
         </p>
       </div>
 
@@ -134,6 +147,9 @@ export default async function DashboardPage() {
           milestones={currentWeekConfig.milestones}
         />
       </div>
+
+      {/* Your Badge */}
+      <BadgeCard fullName={fullName} plan={plan} cohortLabel={COHORT_LABEL} />
 
       {/* Course Materials */}
       <div>

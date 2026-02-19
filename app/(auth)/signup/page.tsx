@@ -23,6 +23,8 @@ function SignupForm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const [applicationId, setApplicationId] = useState('')
+
   useEffect(() => {
     async function validateToken() {
       if (!token) {
@@ -33,7 +35,7 @@ function SignupForm() {
       const supabase = createClient()
       const { data, error: queryError } = await supabase
         .from('invite_tokens')
-        .select('id, email')
+        .select('id, email, application_id')
         .eq('token', token)
         .eq('used', false)
         .gt('expires_at', new Date().toISOString())
@@ -45,6 +47,7 @@ function SignupForm() {
         setTokenValid(true)
         setInviteEmail(data.email)
         setTokenId(data.id)
+        if (data.application_id) setApplicationId(data.application_id)
       }
 
       setValidating(false)
@@ -77,6 +80,25 @@ function SignupForm() {
       setError(signUpError.message)
       setLoading(false)
       return
+    }
+
+    // Sync plan from application to profile
+    if (applicationId) {
+      const { data: app } = await supabase
+        .from('applications')
+        .select('plan')
+        .eq('id', applicationId)
+        .single()
+
+      const plan = app?.plan || 'basic'
+
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        await supabase
+          .from('profiles')
+          .update({ plan })
+          .eq('id', user.id)
+      }
     }
 
     await supabase
