@@ -1,15 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
 
   const scrollTo = (id: string) => {
     setMobileOpen(false)
+    if (pathname !== '/') {
+      window.location.href = `/#${id}`
+      return
+    }
     const el = document.getElementById(id)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' })

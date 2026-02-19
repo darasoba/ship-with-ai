@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -18,14 +19,17 @@ export function ProfileForm({ userId, initialName, email, cohort, initialProject
   const [project, setProject] = useState(initialProject)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+  const router = useRouter()
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
     setSaved(false)
+    setError('')
 
     const supabase = createClient()
-    await supabase
+    const { error: updateError } = await supabase
       .from('profiles')
       .update({
         full_name: name,
@@ -34,7 +38,14 @@ export function ProfileForm({ userId, initialName, email, cohort, initialProject
       .eq('id', userId)
 
     setSaving(false)
+
+    if (updateError) {
+      setError(updateError.message)
+      return
+    }
+
     setSaved(true)
+    router.refresh()
     setTimeout(() => setSaved(false), 3000)
   }
 
@@ -79,6 +90,7 @@ export function ProfileForm({ userId, initialName, email, cohort, initialProject
           {saving ? 'Saving...' : 'Save Changes'}
         </Button>
         {saved && <span className="text-sm text-green-500">Saved</span>}
+        {error && <span className="text-sm text-red-500">{error}</span>}
       </div>
     </form>
   )
