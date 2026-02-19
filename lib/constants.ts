@@ -53,6 +53,12 @@ export function formatPrice(plan: typeof PLANS[PlanId], isNigeria: boolean) {
 
 export const MATERIALS_ORDER = [
   {
+    slug: 'onboarding',
+    title: 'Onboarding',
+    description: 'Everything you need to get started. Pre-work checklist, communication channels, and expectations.',
+    category: 'core' as const,
+  },
+  {
     slug: 'curriculum',
     title: 'Curriculum',
     description: 'The full 4-week day-by-day guide. Start here.',
