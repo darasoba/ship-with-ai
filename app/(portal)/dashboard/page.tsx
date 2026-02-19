@@ -1,9 +1,8 @@
-import { MATERIALS_ORDER, WEEK_CONFIG, COHORT_LABEL } from '@/lib/constants'
+import { MATERIALS_ORDER, WEEK_CONFIG } from '@/lib/constants'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { FolderCard } from '@/components/ui/folder-card'
 import { DashboardProgress } from './dashboard-progress'
-import { BadgeCard } from './badge-card'
 
 const hasSupabase =
   process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
@@ -147,9 +146,6 @@ export default async function DashboardPage() {
           milestones={currentWeekConfig.milestones}
         />
       </div>
-
-      {/* Your Badge */}
-      <BadgeCard fullName={fullName} plan={plan} cohortLabel={COHORT_LABEL} />
 
       {/* Course Materials */}
       <div>
