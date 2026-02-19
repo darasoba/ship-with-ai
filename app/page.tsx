@@ -370,9 +370,11 @@ export default async function Home() {
               <div className={SHOW_PREMIUM_PLAN ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : ''}>
                 {/* Basic */}
                 <Card className="text-center p-8 md:p-10 flex flex-col border-accent/40 relative">
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
-                    Popular
-                  </span>
+                  {SHOW_PREMIUM_PLAN && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
+                      Popular
+                    </span>
+                  )}
                   {SHOW_PREMIUM_PLAN && (
                     <p className="text-[13px] font-medium text-foreground-tertiary uppercase tracking-widest">
                       {PLANS.basic.name}

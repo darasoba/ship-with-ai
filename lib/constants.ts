@@ -10,10 +10,10 @@ export const COHORT_LABEL = "March '26 Cohort"
 export const PLANS = {
   basic: {
     name: 'Basic',
-    priceUSD: 38,
-    priceNGN: 50_000,
-    stripeAmount: 4053,
-    paystackAmount: 5_086_300,
+    priceUSD: 55,
+    priceNGN: 75_000,
+    stripeAmount: 5852,
+    paystackAmount: 7_624_400,
     stripeName: 'Ship With AI — Cohort Access',
     features: [
       '4 weeks of mentorship',
