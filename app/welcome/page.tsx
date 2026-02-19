@@ -224,17 +224,17 @@ function CallbackContent() {
             {/* Dynamic name + cohort overlay */}
             <div
               className="absolute flex flex-col justify-start"
-              style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
+              style={{ left: '13%', top: '23%', width: '60%', height: '25%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
             >
               <p
                 className="font-semibold text-black text-left w-full uppercase"
                 style={{
-                  fontSize: `${cardWidth * 0.055}px`,
+                  fontSize: `${cardWidth * (fullName.length > 20 ? 0.043 : 0.055)}px`,
                   transform: 'rotate(-1.75deg)',
-                  lineHeight: 1.2,
+                  lineHeight: 1.15,
                   fontFamily: 'Inter, sans-serif',
                   overflow: 'hidden',
-                  maxHeight: `${cardWidth * 0.055 * 1.2 * 2}px`,
+                  maxHeight: `${cardWidth * (fullName.length > 20 ? 0.043 : 0.055) * 1.15 * 2}px`,
                   wordBreak: 'break-word',
                 }}
               >
@@ -243,12 +243,12 @@ function CallbackContent() {
               <p
                 className="font-medium text-left w-full"
                 style={{
-                  fontSize: `${cardWidth * 0.03}px`,
+                  fontSize: `${cardWidth * 0.028}px`,
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.1,
                   fontFamily: 'Inter, sans-serif',
                   color: 'rgba(0,0,0,0.52)',
-                  marginTop: '4%',
+                  marginTop: '3%',
                 }}
               >
                 {COHORT_LABEL}{plan === 'premium' ? ' · Premium' : ''}
