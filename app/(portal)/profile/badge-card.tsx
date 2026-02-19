@@ -26,6 +26,7 @@ interface BadgeCardProps {
 }
 
 export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
+  // cardRef wraps ONLY the SVG — no text overlay inside
   const cardRef = useRef<HTMLDivElement>(null)
 
   const handleDownload = useCallback(async () => {
@@ -35,10 +36,6 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
         scale: 4,
         useCORS: true,
         backgroundColor: null,
-        onclone: (_doc: Document, el: HTMLElement) => {
-          const overlay = el.querySelector('[data-text-overlay]') as HTMLElement | null
-          if (overlay) overlay.style.display = 'none'
-        },
       })
 
       const W = raw.width
@@ -112,33 +109,42 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
     }
   }, [fullName, plan, cohortLabel])
 
+  const cohortText = `${cohortLabel}${plan === 'premium' ? ' · Premium' : ''}`
+
   return (
     <div>
       <h2 className="text-lg font-semibold text-foreground mb-4">Your Badge</h2>
       <div className="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-6 items-start">
-        {/* Card preview */}
+        {/* Card preview — wrapper positions text over the SVG-only ref */}
         <div>
           <div
-            ref={cardRef}
             className="relative w-full overflow-hidden rounded-lg"
-            style={{ aspectRatio: '784 / 931', filter: getCardFilter(fullName, plan) }}
+            style={{ aspectRatio: '784 / 931' }}
           >
-            <img
-              src={plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'}
-              alt=""
-              className="absolute inset-0 w-full h-full pointer-events-none"
-              draggable={false}
-              onContextMenu={(e) => e.preventDefault()}
-            />
+            {/* SVG-only layer (captured by html2canvas) */}
             <div
-              data-text-overlay
-              className="absolute flex flex-col justify-start"
-              style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
+              ref={cardRef}
+              className="absolute inset-0"
+              style={{ filter: getCardFilter(fullName, plan) }}
+            >
+              <img
+                src={plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'}
+                alt=""
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+              />
+            </div>
+
+            {/* Text overlay — outside cardRef so it's NOT captured by html2canvas */}
+            <div
+              className="absolute flex flex-col justify-start pointer-events-none"
+              style={{ left: '13%', top: '25%', width: '60%', paddingTop: '1.5%' }}
             >
               <p
-                className="font-semibold text-black text-left w-full uppercase line-clamp-2"
+                className="font-bold text-black text-left w-full uppercase line-clamp-2"
                 style={{
-                  fontSize: 'clamp(0.5rem, 3vw, 0.9rem)',
+                  fontSize: '0.7rem',
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.2,
                   fontFamily: 'Inter, sans-serif',
@@ -149,15 +155,15 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
               <p
                 className="font-medium text-left w-full"
                 style={{
-                  fontSize: 'clamp(0.3rem, 1.6vw, 0.55rem)',
+                  fontSize: '0.4rem',
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.1,
                   fontFamily: 'Inter, sans-serif',
                   color: 'rgba(0,0,0,0.52)',
-                  marginTop: '1.5%',
+                  marginTop: '2%',
                 }}
               >
-                {cohortLabel}{plan === 'premium' ? ' · Premium' : ''}
+                {cohortText}
               </p>
             </div>
           </div>
