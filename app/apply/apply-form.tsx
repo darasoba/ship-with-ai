@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Logo } from '@/components/ui/logo'
-import { PLANS, formatPrice, type PlanId } from '@/lib/constants'
+import { SHOW_PREMIUM_PLAN, PLANS, formatPrice, type PlanId } from '@/lib/constants'
 
 const ROLE_OPTIONS = [
   'Designer',
@@ -195,30 +195,32 @@ function ApplyFormInner({ isNigeria }: { isNigeria: boolean }) {
             </div>
 
             {/* Plan selector */}
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-foreground">
-                Plan
-              </label>
-              <div className="flex gap-2">
-                {(Object.keys(PLANS) as PlanId[]).map((id) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => setSelectedPlan(id)}
-                    className={`flex-1 px-4 py-3 rounded-xl border text-sm font-medium transition-colors ${
-                      selectedPlan === id
-                        ? 'border-accent bg-accent/10 text-foreground'
-                        : 'border-border bg-surface text-foreground-secondary hover:border-border-subtle'
-                    }`}
-                  >
-                    <span className="block">{PLANS[id].name}</span>
-                    <span className="block text-[13px] mt-0.5 opacity-70">
-                      {formatPrice(PLANS[id], isNigeria)}
-                    </span>
-                  </button>
-                ))}
+            {SHOW_PREMIUM_PLAN && (
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-foreground">
+                  Plan
+                </label>
+                <div className="flex gap-2">
+                  {(Object.keys(PLANS) as PlanId[]).map((id) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => setSelectedPlan(id)}
+                      className={`flex-1 px-4 py-3 rounded-xl border text-sm font-medium transition-colors ${
+                        selectedPlan === id
+                          ? 'border-accent bg-accent/10 text-foreground'
+                          : 'border-border bg-surface text-foreground-secondary hover:border-border-subtle'
+                      }`}
+                    >
+                      <span className="block">{PLANS[id].name}</span>
+                      <span className="block text-[13px] mt-0.5 opacity-70">
+                        {formatPrice(PLANS[id], isNigeria)}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="space-y-1.5">
               <label className="block text-sm font-medium text-foreground">

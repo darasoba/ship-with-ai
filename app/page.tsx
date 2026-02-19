@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { headers } from 'next/headers'
-import { ENROLLMENT_CLOSED, PLANS, formatPrice } from '@/lib/constants'
+import { ENROLLMENT_CLOSED, SHOW_PREMIUM_PLAN, PLANS, formatPrice } from '@/lib/constants'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { FadeIn } from '@/components/landing/fade-in'
@@ -361,22 +361,24 @@ export default async function Home() {
           <div className="max-w-2xl mx-auto">
             <FadeIn>
               <h2 className="text-[28px] leading-[34px] md:text-[36px] md:leading-[42px] font-[600] tracking-tight text-foreground text-center mb-12">
-                Simple pricing. Pick your plan.
+                {SHOW_PREMIUM_PLAN ? 'Simple pricing. Pick your plan.' : 'Simple pricing.'}
               </h2>
             </FadeIn>
           </div>
-          <div className="max-w-2xl mx-auto">
+          <div className={SHOW_PREMIUM_PLAN ? 'max-w-2xl mx-auto' : 'max-w-md mx-auto'}>
             <FadeIn delay={100}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className={SHOW_PREMIUM_PLAN ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : ''}>
                 {/* Basic */}
                 <Card className="text-center p-8 md:p-10 flex flex-col border-accent/40 relative">
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
                     Popular
                   </span>
-                  <p className="text-[13px] font-medium text-foreground-tertiary uppercase tracking-widest">
-                    {PLANS.basic.name}
-                  </p>
-                  <p className="mt-4 text-[48px] font-bold text-foreground tracking-tight leading-none">
+                  {SHOW_PREMIUM_PLAN && (
+                    <p className="text-[13px] font-medium text-foreground-tertiary uppercase tracking-widest">
+                      {PLANS.basic.name}
+                    </p>
+                  )}
+                  <p className={`${SHOW_PREMIUM_PLAN ? 'mt-4' : 'mt-2'} text-[48px] font-bold text-foreground tracking-tight leading-none`}>
                     {basicPrice}
                   </p>
                   <ul className="mt-8 space-y-2.5 text-left mx-auto flex-1">
@@ -410,45 +412,47 @@ export default async function Home() {
                 </Card>
 
                 {/* Premium */}
-                <Card className="text-center p-8 md:p-10 flex flex-col border-[#D4A847]/40 relative" style={{ background: 'linear-gradient(to bottom, var(--premium-from), var(--premium-to))' }}>
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Image src="/prem.svg" alt="Premium" width={28} height={28} />
-                  </span>
-                  <p className="text-[13px] font-medium text-[#B8860B] uppercase tracking-widest">
-                    {PLANS.premium.name}
-                  </p>
-                  <p className="mt-4 text-[48px] font-bold text-foreground tracking-tight leading-none">
-                    {premiumPrice}
-                  </p>
-                  <ul className="mt-8 space-y-2.5 text-left mx-auto flex-1">
-                    {PLANS.premium.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-center gap-3 text-[14px] text-foreground-secondary"
-                      >
-                        <svg
-                          className="w-3.5 h-3.5 text-[#D4A847] flex-shrink-0"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
+                {SHOW_PREMIUM_PLAN && (
+                  <Card className="text-center p-8 md:p-10 flex flex-col border-[#D4A847]/40 relative" style={{ background: 'linear-gradient(to bottom, var(--premium-from), var(--premium-to))' }}>
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <Image src="/prem.svg" alt="Premium" width={28} height={28} />
+                    </span>
+                    <p className="text-[13px] font-medium text-[#B8860B] uppercase tracking-widest">
+                      {PLANS.premium.name}
+                    </p>
+                    <p className="mt-4 text-[48px] font-bold text-foreground tracking-tight leading-none">
+                      {premiumPrice}
+                    </p>
+                    <ul className="mt-8 space-y-2.5 text-left mx-auto flex-1">
+                      {PLANS.premium.features.map((feature) => (
+                        <li
+                          key={feature}
+                          className="flex items-center gap-3 text-[14px] text-foreground-secondary"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2.5}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link href="/apply?plan=premium" className="block mt-8">
-                    <Button size="lg" className="w-full !border-[#B8860B]" style={{ backgroundColor: '#B8860B', color: '#fff' }}>
-                      Apply now
-                    </Button>
-                  </Link>
-                </Card>
+                          <svg
+                            className="w-3.5 h-3.5 text-[#D4A847] flex-shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2.5}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link href="/apply?plan=premium" className="block mt-8">
+                      <Button size="lg" className="w-full !border-[#B8860B]" style={{ backgroundColor: '#B8860B', color: '#fff' }}>
+                        Apply now
+                      </Button>
+                    </Link>
+                  </Card>
+                )}
               </div>
               <p className="mt-6 text-center text-[13px] text-foreground-tertiary">
                 One-time payment.
