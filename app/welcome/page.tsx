@@ -46,26 +46,24 @@ function CallbackContent() {
   const [errorMessage, setErrorMessage] = useState('')
 
   const cardRef = useRef<HTMLDivElement>(null)
-  const textOverlayRef = useRef<HTMLDivElement>(null)
 
   const triggerConfetti = useCallback(() => {
     fireConfetti()
   }, [])
 
   const handleDownloadCard = useCallback(async () => {
-    if (!cardRef.current || !textOverlayRef.current) return
+    if (!cardRef.current) return
     try {
-      // Hide the HTML text overlay so html2canvas only captures the background
-      textOverlayRef.current.style.visibility = 'hidden'
-
+      // Use onclone to hide text in the CLONED DOM only — no flickering on the real page
       const raw = await html2canvas(cardRef.current, {
         scale: 4,
         useCORS: true,
         backgroundColor: null,
+        onclone: (_doc: Document, el: HTMLElement) => {
+          const overlay = el.querySelector('[data-text-overlay]') as HTMLElement | null
+          if (overlay) overlay.style.display = 'none'
+        },
       })
-
-      // Restore the text overlay
-      textOverlayRef.current.style.visibility = 'visible'
 
       const W = raw.width
       const H = raw.height
@@ -87,7 +85,7 @@ function CallbackContent() {
       const cohort = `${COHORT_LABEL}${plan === 'premium' ? ' · Premium' : ''}`
 
       const textX = W * 0.13
-      const textY = W * 0.055 + H * 0.25  // top + paddingTop + baseline offset
+      const textY = W * 0.055 + H * 0.23  // top + paddingTop + baseline offset
       const maxW = W * 0.58
 
       // Name — bold, sized to fit in max 2 lines
@@ -129,7 +127,7 @@ function CallbackContent() {
       })
 
       // Cohort label
-      const cohortY = nameLines.length * lineHeight + nameFontSize * 0.5
+      const cohortY = nameLines.length * lineHeight + nameFontSize * 0.15
       const cohortFontSize = W * 0.03
       ctx.font = `500 ${cohortFontSize}px Inter, sans-serif`
       ctx.fillStyle = 'rgba(0,0,0,0.52)'
@@ -268,11 +266,13 @@ function CallbackContent() {
             <img
               src={plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'}
               alt=""
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
             />
             {/* Dynamic name + cohort overlay */}
             <div
-              ref={textOverlayRef}
+              data-text-overlay
               className="absolute flex flex-col justify-start"
               style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
             >
@@ -295,7 +295,7 @@ function CallbackContent() {
                   lineHeight: 1.1,
                   fontFamily: 'Inter, sans-serif',
                   color: 'rgba(0,0,0,0.52)',
-                  marginTop: '4%',
+                  marginTop: '1.5%',
                 }}
               >
                 {COHORT_LABEL}{plan === 'premium' ? ' · Premium' : ''}
