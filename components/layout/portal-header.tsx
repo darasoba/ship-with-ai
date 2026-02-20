@@ -281,10 +281,6 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
               <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-medium">
                 {initials}
               </div>
-              <span>{userName || 'Student'}</span>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
             </button>
 
             {menuOpen && (
