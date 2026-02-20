@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Logo } from '@/components/ui/logo'
+import html2canvas from 'html2canvas'
 
 const CARD_FILTERS = ['none', 'hue-rotate(160deg)', 'hue-rotate(270deg)']
 
@@ -29,6 +30,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
   const [mobileOpen, setMobileOpen] = useState(false)
   const [badgeOpen, setBadgeOpen] = useState(false)
   const badgeTimeout = useRef<NodeJS.Timeout | null>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -48,42 +50,33 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
 
   const fullName = userName || 'Student'
 
+  // Same download logic as welcome page: html2canvas with onclone to hide text overlay
   const handleDownload = useCallback(async () => {
+    if (!cardRef.current) return
     try {
-      // Load the SVG directly — no html2canvas needed
-      const svgUrl = plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'
-      const img = new Image()
-      img.crossOrigin = 'anonymous'
-      img.src = svgUrl
-      await new Promise<void>((resolve, reject) => {
-        img.onload = () => resolve()
-        img.onerror = () => reject(new Error('Failed to load card SVG'))
+      const raw = await html2canvas(cardRef.current, {
+        scale: 4,
+        useCORS: true,
+        backgroundColor: null,
+        onclone: (_doc: Document, el: HTMLElement) => {
+          const overlay = el.querySelector('[data-text-overlay]') as HTMLElement | null
+          if (overlay) overlay.style.display = 'none'
+        },
       })
 
-      // Use card's native aspect ratio at high res
-      const W = 784 * 4
-      const H = 931 * 4
+      const W = raw.width
+      const H = raw.height
 
-      const canvas = document.createElement('canvas')
-      canvas.width = W
-      canvas.height = H
-      const ctx = canvas.getContext('2d')!
+      const final = document.createElement('canvas')
+      final.width = W
+      final.height = H
+      const ctx = final.getContext('2d')!
 
-      // Apply hue-rotate filter for non-premium cards
       const cssFilter = getCardFilter(fullName, plan || 'basic')
       if (cssFilter !== 'none') ctx.filter = cssFilter
-      ctx.drawImage(img, 0, 0, W, H)
+      ctx.drawImage(raw, 0, 0)
       ctx.filter = 'none'
 
-      // Cover the baked-in text area from the SVG with the card background color
-      ctx.save()
-      ctx.translate(W * 0.10, H * 0.195)
-      ctx.rotate(-1.75 * Math.PI / 180)
-      ctx.fillStyle = '#FBF6EE'
-      ctx.fillRect(0, 0, W * 0.62, H * 0.14)
-      ctx.restore()
-
-      // Draw name text
       const name = (fullName || 'Cohort Member').toUpperCase()
       const cohort = `${cohortLabel}${plan === 'premium' ? ' · Premium' : ''}`
 
@@ -135,7 +128,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
 
       const link = document.createElement('a')
       link.download = 'ship-with-ai-card.png'
-      link.href = canvas.toDataURL('image/png')
+      link.href = final.toDataURL('image/png')
       link.click()
     } catch (err) {
       console.error('Failed to download card:', err)
@@ -163,49 +156,35 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
       onMouseEnter={showBadge}
       onMouseLeave={hideBadge}
     >
-      {/* Mini badge card preview */}
+      {/* Card — same structure as welcome page */}
       <div
+        ref={cardRef}
         className="relative w-full overflow-hidden rounded-lg"
-        style={{ aspectRatio: '784 / 931' }}
+        style={{ aspectRatio: '784 / 931', filter: getCardFilter(fullName, plan || 'basic') }}
       >
-        <div
-          className="absolute inset-0"
-          style={{ filter: getCardFilter(fullName, plan || 'basic') }}
-        >
-          <img
-            src={plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'}
-            alt=""
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            draggable={false}
-          />
-        </div>
-        {/* Cover baked-in text from SVG */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            left: '10%',
-            top: '19.5%',
-            width: '62%',
-            height: '14%',
-            backgroundColor: '#FBF6EE',
-            transform: 'rotate(-1.75deg)',
-          }}
+        <img
+          src={plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'}
+          alt=""
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
         />
+        {/* Text overlay with solid bg to cover baked-in SVG text */}
         <div
-          className="absolute flex flex-col justify-start pointer-events-none"
-          style={{ left: '13%', top: '23.5%', width: '58%', paddingTop: '1.5%' }}
+          data-text-overlay
+          className="absolute flex flex-col justify-start"
+          style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
         >
           <p
-            className="font-bold text-black text-left w-full uppercase line-clamp-2"
+            className="font-semibold text-black text-left w-full uppercase line-clamp-2"
             style={{
               fontSize: '0.52rem',
               transform: 'rotate(-1.75deg)',
-              lineHeight: 1.15,
+              lineHeight: 1.2,
               fontFamily: 'Inter, sans-serif',
-              letterSpacing: '-0.01em',
             }}
           >
-            {fullName}
+            {fullName || 'Cohort Member'}
           </p>
           <p
             className="font-medium text-left w-full"
@@ -215,7 +194,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
               lineHeight: 1.1,
               fontFamily: 'Inter, sans-serif',
               color: 'rgba(0,0,0,0.52)',
-              marginTop: '2%',
+              marginTop: '1.5%',
             }}
           >
             {cohortText}
