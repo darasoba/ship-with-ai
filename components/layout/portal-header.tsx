@@ -247,8 +247,8 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
           </nav>
         </div>
 
-        <div className="hidden md:flex items-center gap-4">
-          {/* Search trigger */}
+        {/* Center — Search trigger */}
+        <div className="hidden md:flex items-center justify-center flex-1">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-command-palette'))}
             className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted hover:text-foreground bg-surface border border-border rounded-lg transition-colors"
@@ -261,7 +261,9 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
               &#8984;K
             </kbd>
           </button>
+        </div>
 
+        <div className="hidden md:flex items-center gap-4">
           {/* Desktop user menu */}
           <div className="relative flex items-center gap-2" ref={menuRef}>
             {/* Plan chip with hover badge — separate from menu button */}
