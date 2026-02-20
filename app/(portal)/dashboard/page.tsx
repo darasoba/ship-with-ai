@@ -46,17 +46,20 @@ export default async function DashboardPage() {
       continueSlug = lastRead?.material_slug || 'curriculum'
     }
   }
-  // Calculate current week from cohort start date (env var) — clamp to 1-4
+  // Calculate current week from cohort start date (env var) — 0 if not started, clamp to 1-4 after
   const cohortStart = process.env.NEXT_PUBLIC_COHORT_START_DATE
-  let currentWeek = 1
+  let currentWeek = 0
   if (cohortStart) {
     const start = new Date(cohortStart)
     const now = new Date()
     const diffMs = now.getTime() - start.getTime()
-    const diffWeeks = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000))
-    currentWeek = Math.max(1, Math.min(4, diffWeeks + 1))
+    if (diffMs >= 0) {
+      const diffWeeks = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000))
+      currentWeek = Math.max(1, Math.min(4, diffWeeks + 1))
+    }
   }
-  const currentWeekConfig = WEEK_CONFIG[currentWeek - 1]
+  const hasStarted = currentWeek > 0
+  const currentWeekConfig = WEEK_CONFIG[hasStarted ? currentWeek - 1 : 0]
   const continueMaterial = MATERIALS_ORDER.find((m) => m.slug === continueSlug)
 
   return (
@@ -67,7 +70,7 @@ export default async function DashboardPage() {
           Welcome back, {firstName}.
         </h1>
         <p className="text-muted mt-1 flex items-center gap-2">
-          <span>Cohort {cohort} &middot; Week {currentWeek}</span>
+          <span>Cohort {cohort} &middot; {hasStarted ? `Week ${currentWeek}` : 'Starts soon'}</span>
           {plan === 'premium' && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r from-amber-500/15 to-orange-500/15 text-amber-600 dark:text-amber-400 rounded-full">
               <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
@@ -83,7 +86,7 @@ export default async function DashboardPage() {
       <div className="space-y-2">
         <div className="flex justify-between text-xs text-muted">
           {WEEK_CONFIG.map((w) => (
-            <span key={w.week} className={w.week === currentWeek ? 'text-accent font-medium' : ''}>
+            <span key={w.week} className={hasStarted && w.week === currentWeek ? 'text-accent font-medium' : ''}>
               Week {w.week}
             </span>
           ))}
@@ -91,7 +94,7 @@ export default async function DashboardPage() {
         <div className="h-2 bg-surface rounded-full overflow-hidden border border-border">
           <div
             className="h-full bg-accent rounded-full transition-all"
-            style={{ width: `${(currentWeek / 4) * 100}%` }}
+            style={{ width: hasStarted ? `${(currentWeek / 4) * 100}%` : '0%' }}
           />
         </div>
       </div>

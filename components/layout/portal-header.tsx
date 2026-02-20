@@ -152,7 +152,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
 
   const badgePopover = (
     <div
-      className="absolute top-full mt-2 right-0 z-50 bg-surface border border-border rounded-xl shadow-lg p-3 w-[200px]"
+      className="absolute top-full mt-4 right-0 z-50 bg-surface border border-border rounded-xl shadow-lg p-3 w-[200px]"
       onMouseEnter={showBadge}
       onMouseLeave={hideBadge}
     >
