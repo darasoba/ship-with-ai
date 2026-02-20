@@ -142,13 +142,14 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
               style={{ left: '13%', top: '23.5%', width: '58%', paddingTop: '1.5%' }}
             >
               <p
-                className="font-bold text-black text-left w-full uppercase line-clamp-2"
+                className="font-bold text-left w-full uppercase line-clamp-2"
                 style={{
                   fontSize: '0.85rem',
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.15,
                   fontFamily: 'Inter, sans-serif',
                   letterSpacing: '-0.01em',
+                  color: '#000000',
                 }}
               >
                 {fullName || 'Cohort Member'}

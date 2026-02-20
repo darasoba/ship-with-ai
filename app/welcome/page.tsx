@@ -261,7 +261,7 @@ function CallbackContent() {
           <div
             ref={cardRef}
             className="relative w-full overflow-hidden rounded-lg"
-            style={{ aspectRatio: '784 / 931', filter: getCardFilter(fullName, plan) }}
+            style={{ aspectRatio: '784 / 931', filter: searchParams.get('filter') ?? getCardFilter(fullName, plan) }}
           >
             <img
               src={plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'}
@@ -273,16 +273,17 @@ function CallbackContent() {
             {/* Dynamic name + cohort overlay */}
             <div
               data-text-overlay
-              className="absolute flex flex-col justify-start"
-              style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
+              className="absolute flex flex-col justify-start pointer-events-none"
+              style={{ left: '13%', top: '25%', width: '60%', paddingTop: '1.5%' }}
             >
               <p
-                className="font-semibold text-black text-left w-full uppercase line-clamp-2"
+                className="font-semibold text-left w-full uppercase line-clamp-2"
                 style={{
                   fontSize: 'clamp(0.75rem, 4vw, 1.4rem)',
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.2,
                   fontFamily: 'Inter, sans-serif',
+                  color: '#000000',
                 }}
               >
                 {fullName || 'Cohort Member'}

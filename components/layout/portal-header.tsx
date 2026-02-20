@@ -169,19 +169,20 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
         />
-        {/* Text overlay with solid bg to cover baked-in SVG text */}
+        {/* Text overlay — no background needed since SVGs are clean */}
         <div
           data-text-overlay
-          className="absolute flex flex-col justify-start"
-          style={{ left: '13%', top: '28%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
+          className="absolute flex flex-col justify-start pointer-events-none"
+          style={{ left: '13%', top: '28%', width: '60%', paddingTop: '1.5%' }}
         >
           <p
-            className="font-semibold text-black text-left w-full uppercase line-clamp-2"
+            className="font-semibold text-left w-full uppercase line-clamp-2"
             style={{
               fontSize: '0.52rem',
               transform: 'rotate(-1.75deg)',
               lineHeight: 1.2,
               fontFamily: 'Inter, sans-serif',
+              color: '#000000',
             }}
           >
             {fullName || 'Cohort Member'}
