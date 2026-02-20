@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Logo } from '@/components/ui/logo'
-import html2canvas from 'html2canvas'
 
 const CARD_FILTERS = ['none', 'hue-rotate(160deg)', 'hue-rotate(270deg)']
 
@@ -30,7 +29,6 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
   const [mobileOpen, setMobileOpen] = useState(false)
   const [badgeOpen, setBadgeOpen] = useState(false)
   const badgeTimeout = useRef<NodeJS.Timeout | null>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -51,27 +49,33 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
   const fullName = userName || 'Student'
 
   const handleDownload = useCallback(async () => {
-    if (!cardRef.current) return
     try {
-      const raw = await html2canvas(cardRef.current, {
-        scale: 4,
-        useCORS: true,
-        backgroundColor: null,
+      // Load the SVG directly — no html2canvas needed
+      const svgUrl = plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      img.src = svgUrl
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = () => reject(new Error('Failed to load card SVG'))
       })
 
-      const W = raw.width
-      const H = raw.height
+      // Use card's native aspect ratio at high res
+      const W = 784 * 4
+      const H = 931 * 4
 
-      const final = document.createElement('canvas')
-      final.width = W
-      final.height = H
-      const ctx = final.getContext('2d')!
+      const canvas = document.createElement('canvas')
+      canvas.width = W
+      canvas.height = H
+      const ctx = canvas.getContext('2d')!
 
+      // Apply hue-rotate filter for non-premium cards
       const cssFilter = getCardFilter(fullName, plan || 'basic')
       if (cssFilter !== 'none') ctx.filter = cssFilter
-      ctx.drawImage(raw, 0, 0)
+      ctx.drawImage(img, 0, 0, W, H)
       ctx.filter = 'none'
 
+      // Draw name text
       const name = (fullName || 'Cohort Member').toUpperCase()
       const cohort = `${cohortLabel}${plan === 'premium' ? ' · Premium' : ''}`
 
@@ -123,7 +127,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
 
       const link = document.createElement('a')
       link.download = 'ship-with-ai-card.png'
-      link.href = final.toDataURL('image/png')
+      link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
       console.error('Failed to download card:', err)
@@ -157,7 +161,6 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
         style={{ aspectRatio: '784 / 931' }}
       >
         <div
-          ref={cardRef}
           className="absolute inset-0"
           style={{ filter: getCardFilter(fullName, plan || 'basic') }}
         >
