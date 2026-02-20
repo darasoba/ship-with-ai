@@ -173,7 +173,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
         <div
           data-text-overlay
           className="absolute flex flex-col justify-start"
-          style={{ left: '13%', top: '25%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
+          style={{ left: '13%', top: '28%', width: '60%', height: '20%', backgroundColor: '#FBF6EE', paddingTop: '1.5%' }}
         >
           <p
             className="font-semibold text-black text-left w-full uppercase line-clamp-2"
