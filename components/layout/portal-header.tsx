@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -31,7 +31,20 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
   const [badgeOpen, setBadgeOpen] = useState(false)
   const badgeTimeout = useRef<NodeJS.Timeout | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
+
+  // Close menu and badge when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+        setBadgeOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handleLogout = async () => {
     const supabase = createClient()
@@ -155,6 +168,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
       className="absolute top-full mt-4 right-0 z-50 bg-surface border border-border rounded-xl shadow-lg p-3 w-[200px]"
       onMouseEnter={showBadge}
       onMouseLeave={hideBadge}
+      onClick={(e) => e.stopPropagation()}
     >
       {/* Card — same structure as welcome page */}
       <div
@@ -249,31 +263,32 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
           </button>
 
           {/* Desktop user menu */}
-          <div className="relative">
+          <div className="relative flex items-center gap-2" ref={menuRef}>
+            {/* Plan chip with hover badge — separate from menu button */}
+            <span
+              className={`relative px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full cursor-default ${chipClasses}`}
+              onMouseEnter={showBadge}
+              onMouseLeave={hideBadge}
+            >
+              {plan === 'premium' ? 'Premium' : 'Basic'}
+              {badgeOpen && badgePopover}
+            </span>
+
             <button
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => { setMenuOpen(!menuOpen); setBadgeOpen(false) }}
               className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors"
             >
               <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-medium">
                 {initials}
               </div>
               <span>{userName || 'Student'}</span>
-              {/* Plan chip with hover badge */}
-              <span
-                className={`relative px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full cursor-default ${chipClasses}`}
-                onMouseEnter={showBadge}
-                onMouseLeave={hideBadge}
-              >
-                {plan === 'premium' ? 'Premium' : 'Basic'}
-                {badgeOpen && badgePopover}
-              </span>
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-surface border border-border rounded-lg py-1">
+              <div className="absolute right-0 top-full mt-2 w-48 bg-surface border border-border rounded-lg py-1">
                 <Link
                   href="/profile"
                   className="block px-4 py-2 text-sm text-muted hover:text-foreground hover:bg-background transition-colors"
