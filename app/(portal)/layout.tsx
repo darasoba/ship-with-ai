@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { PortalHeader } from '@/components/layout/portal-header'
 import { CommandPalette } from '@/components/portal/command-palette'
+import { COHORT_LABEL } from '@/lib/constants'
 
 const hasSupabase =
   process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
@@ -35,7 +36,7 @@ export default async function PortalLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      <PortalHeader userName={userName} plan={userPlan} />
+      <PortalHeader userName={userName} plan={userPlan} cohortLabel={COHORT_LABEL} />
       <CommandPalette />
       <main>{children}</main>
     </div>

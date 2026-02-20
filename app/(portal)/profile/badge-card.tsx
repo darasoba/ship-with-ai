@@ -114,9 +114,9 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
   return (
     <div>
       <h2 className="text-lg font-semibold text-foreground mb-4">Your Badge</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-6 items-start">
-        {/* Card preview — wrapper positions text over the SVG-only ref */}
-        <div>
+      <div className="flex flex-col sm:flex-row gap-6 items-start">
+        {/* Card preview — fixed width for consistent font sizing */}
+        <div className="w-full max-w-[260px] mx-auto sm:mx-0 shrink-0">
           <div
             className="relative w-full overflow-hidden rounded-lg"
             style={{ aspectRatio: '784 / 931' }}
@@ -139,15 +139,16 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
             {/* Text overlay — outside cardRef so it's NOT captured by html2canvas */}
             <div
               className="absolute flex flex-col justify-start pointer-events-none"
-              style={{ left: '13%', top: '25%', width: '60%', paddingTop: '1.5%' }}
+              style={{ left: '13%', top: '23.5%', width: '58%', paddingTop: '1.5%' }}
             >
               <p
                 className="font-bold text-black text-left w-full uppercase line-clamp-2"
                 style={{
-                  fontSize: '0.7rem',
+                  fontSize: '0.85rem',
                   transform: 'rotate(-1.75deg)',
-                  lineHeight: 1.2,
+                  lineHeight: 1.15,
                   fontFamily: 'Inter, sans-serif',
+                  letterSpacing: '-0.01em',
                 }}
               >
                 {fullName || 'Cohort Member'}
@@ -155,7 +156,7 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
               <p
                 className="font-medium text-left w-full"
                 style={{
-                  fontSize: '0.4rem',
+                  fontSize: '0.45rem',
                   transform: 'rotate(-1.75deg)',
                   lineHeight: 1.1,
                   fontFamily: 'Inter, sans-serif',
@@ -170,7 +171,7 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
         </div>
 
         {/* Info + download */}
-        <div className="space-y-3">
+        <div className="space-y-3 pt-1">
           <p className="text-sm text-muted">
             Your cohort badge. Share it on socials to let people know you&apos;re shipping with AI.
           </p>
