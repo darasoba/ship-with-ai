@@ -75,6 +75,14 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
       ctx.drawImage(img, 0, 0, W, H)
       ctx.filter = 'none'
 
+      // Cover the baked-in text area from the SVG with the card background color
+      ctx.save()
+      ctx.translate(W * 0.10, H * 0.195)
+      ctx.rotate(-1.75 * Math.PI / 180)
+      ctx.fillStyle = '#FBF6EE'
+      ctx.fillRect(0, 0, W * 0.62, H * 0.14)
+      ctx.restore()
+
       // Draw name text
       const name = (fullName || 'Cohort Member').toUpperCase()
       const cohort = `${cohortLabel}${plan === 'premium' ? ' · Premium' : ''}`
@@ -171,6 +179,18 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
             draggable={false}
           />
         </div>
+        {/* Cover baked-in text from SVG */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            left: '10%',
+            top: '19.5%',
+            width: '62%',
+            height: '14%',
+            backgroundColor: '#FBF6EE',
+            transform: 'rotate(-1.75deg)',
+          }}
+        />
         <div
           className="absolute flex flex-col justify-start pointer-events-none"
           style={{ left: '13%', top: '23.5%', width: '58%', paddingTop: '1.5%' }}
