@@ -33,7 +33,7 @@ export function ProfileForm({ userId, initialName, email, cohort, initialProject
       .from('profiles')
       .update({
         full_name: name,
-        project_description: project,
+        project: project,
       })
       .eq('id', userId)
 

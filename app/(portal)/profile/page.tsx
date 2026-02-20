@@ -12,7 +12,7 @@ export default async function ProfilePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, cohort, project_description')
+    .select('full_name, cohort, project')
     .eq('id', user!.id)
     .single()
 
@@ -25,7 +25,7 @@ export default async function ProfilePage() {
         initialName={profile?.full_name || ''}
         email={user!.email || ''}
         cohort={profile?.cohort || 1}
-        initialProject={profile?.project_description || ''}
+        initialProject={profile?.project || ''}
       />
 
       <div className="border-t border-border pt-10">
