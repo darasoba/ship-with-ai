@@ -240,6 +240,9 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
             <Link href="/materials" className="text-sm text-muted hover:text-foreground transition-colors">
               Materials
             </Link>
+            <Link href="/videos" className="text-sm text-muted hover:text-foreground transition-colors">
+              Videos
+            </Link>
           </nav>
         </div>
 
@@ -355,6 +358,13 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
             onClick={() => setMobileOpen(false)}
           >
             Materials
+          </Link>
+          <Link
+            href="/videos"
+            className="block text-sm text-muted hover:text-foreground"
+            onClick={() => setMobileOpen(false)}
+          >
+            Videos
           </Link>
           <Link
             href="/profile"

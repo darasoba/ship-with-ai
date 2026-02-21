@@ -1,4 +1,4 @@
-import { MATERIALS_ORDER, WEEK_CONFIG } from '@/lib/constants'
+import { MATERIALS_ORDER, WEEK_CONFIG, ANNOUNCEMENT } from '@/lib/constants'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { FolderCard } from '@/components/ui/folder-card'
@@ -64,6 +64,16 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10 space-y-10">
+      {/* Announcement banner */}
+      {ANNOUNCEMENT && (
+        <div className="flex items-start gap-3 px-4 py-3 rounded-lg bg-accent/10 border border-accent/20 text-sm text-foreground">
+          <svg className="w-4 h-4 mt-0.5 shrink-0 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+          </svg>
+          <span>{ANNOUNCEMENT}</span>
+        </div>
+      )}
+
       {/* Welcome */}
       <div>
         <h1 className="text-2xl font-bold text-foreground">

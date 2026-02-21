@@ -7,6 +7,9 @@ export const SHOW_PREMIUM_PLAN = true
 // Update this each cohort
 export const COHORT_LABEL = "March '26 Cohort"
 
+// Set to null to hide the announcement banner on the dashboard
+export const ANNOUNCEMENT = "🗓️ Cohort starts March 2nd. Complete your pre-work before March 1st."
+
 // Prices from env vars (change on Vercel, redeploy to update)
 const basicUSD = Number(process.env.NEXT_PUBLIC_BASIC_PRICE_USD) || 55
 const basicNGN = Number(process.env.NEXT_PUBLIC_BASIC_PRICE_NGN) || 75_000
