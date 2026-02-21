@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useRef } from 'react'
-import html2canvas from 'html2canvas'
 
 const CARD_FILTERS = [
   'none',
@@ -26,31 +25,37 @@ interface BadgeCardProps {
 }
 
 export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
-  // cardRef wraps ONLY the SVG — no text overlay inside
   const cardRef = useRef<HTMLDivElement>(null)
 
   const handleDownload = useCallback(async () => {
-    if (!cardRef.current) return
     try {
-      const raw = await html2canvas(cardRef.current, {
-        scale: 4,
-        useCORS: true,
-        backgroundColor: null,
+      const svgPath = plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'
+
+      // Load SVG directly into an Image — bypasses html2canvas entirely
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = () => reject(new Error('Failed to load card SVG'))
+        img.src = svgPath
       })
 
-      const W = raw.width
-      const H = raw.height
+      const scale = 4
+      const W = img.naturalWidth * scale
+      const H = img.naturalHeight * scale
 
-      const final = document.createElement('canvas')
-      final.width = W
-      final.height = H
-      const ctx = final.getContext('2d')!
+      const canvas = document.createElement('canvas')
+      canvas.width = W
+      canvas.height = H
+      const ctx = canvas.getContext('2d')!
 
+      // Apply color filter if applicable
       const cssFilter = getCardFilter(fullName, plan)
       if (cssFilter !== 'none') ctx.filter = cssFilter
-      ctx.drawImage(raw, 0, 0)
+      ctx.drawImage(img, 0, 0, W, H)
       ctx.filter = 'none'
 
+      // Draw name text
       const name = (fullName || 'Cohort Member').toUpperCase()
       const cohort = `${cohortLabel}${plan === 'premium' ? ' · Premium' : ''}`
 
@@ -92,6 +97,7 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
         ctx.fillText(line, 0, i * lineHeight)
       })
 
+      // Draw cohort label
       const cohortY = nameLines.length * lineHeight + nameFontSize * 0.15
       const cohortFontSize = W * 0.03
       ctx.font = `500 ${cohortFontSize}px Inter, sans-serif`
@@ -102,7 +108,7 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
 
       const link = document.createElement('a')
       link.download = 'ship-with-ai-card.png'
-      link.href = final.toDataURL('image/png')
+      link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
       console.error('Failed to download card:', err)
@@ -121,7 +127,7 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
             className="relative w-full overflow-hidden rounded-lg"
             style={{ aspectRatio: '784 / 931' }}
           >
-            {/* SVG-only layer (captured by html2canvas) */}
+            {/* SVG with color filter */}
             <div
               ref={cardRef}
               className="absolute inset-0"
@@ -136,10 +142,11 @@ export function BadgeCard({ fullName, plan, cohortLabel }: BadgeCardProps) {
               />
             </div>
 
-            {/* Text overlay — outside cardRef so it's NOT captured by html2canvas */}
+            {/* Text overlay covers baked-in SVG sample text on screen */}
             <div
+              data-text-overlay
               className="absolute flex flex-col justify-start pointer-events-none"
-              style={{ left: '13%', top: '23.5%', width: '58%', paddingTop: '1.5%' }}
+              style={{ left: '13%', top: '23.5%', width: '58%', paddingTop: '1.5%', backgroundColor: '#FBF6EE' }}
             >
               <p
                 className="font-bold text-left w-full uppercase line-clamp-2"

@@ -82,8 +82,8 @@ Complete before the first live session. Estimated time: 3-4 hours.
 ### Accounts Needed
 
 - GitHub account (free)
-- Anthropic API key (for Claude Code) -- sign up at [console.anthropic.com](https://console.anthropic.com/)
-- OpenAI account (for Codex) -- sign up at [platform.openai.com](https://platform.openai.com/)
+- Claude Code account -- sign up at [claude.ai](https://claude.ai)
+- ChatGPT Plus account (for Codex) -- sign up at [chat.openai.com](https://chat.openai.com/)
 - Cursor account (free tier works)
 - Vercel or Netlify account (for deployment, both have free tiers)
 - Supabase or Firebase account (if building an app with a database, both have free tiers)
@@ -92,7 +92,7 @@ Complete before the first live session. Estimated time: 3-4 hours.
 
 | Tool | Cost | Notes |
 |---|---|---|
-| Claude Code | ~$20/month (Anthropic API) or Claude Pro subscription | API usage-based; a typical project costs $5-15 total |
+| Claude Code | Free tier available, Claude Pro is $20/month | Sign up at claude.ai |
 | Cursor | Free tier available, Pro is $20/month | Free tier gives limited requests |
 | Codex | ChatGPT Plus ($20/month) or API usage | Codex in ChatGPT requires Plus or Pro |
 | Bolt.new / Lovable / v0 | Free tiers available | Good for quick prototypes |
@@ -274,9 +274,9 @@ Submit your completed project brief to the cohort channel before Day 1. This is 
 > **Theme:** Understand how AI coding tools work, pick your primary tool, set up your project, and build your first working prototype.
 
 **Study materials to keep open all week:**
-- `materials/TOOL_REFERENCE.md` -- Quick reference for Claude Code, Cursor, and Codex commands
-- `materials/TROUBLESHOOTING.md` -- When something goes wrong during setup, check here first
-- `materials/STUDENT_HANDBOOK.md` -- Start posting daily standups from Day 1. The template is in this doc.
+- [Tool Reference](/materials/tool-reference) -- Quick reference for Claude Code, Cursor, and Codex commands
+- [Troubleshooting](/materials/troubleshooting) -- When something goes wrong during setup, check here first
+- [Student Handbook](/materials/student-handbook) -- Start posting daily standups from Day 1. The template is in this doc.
 
 ---
 
@@ -1822,9 +1822,9 @@ This becomes your Week 2 roadmap.
 > **Theme:** Build out your core features. This is where most of the actual coding happens. AI does the heavy lifting, you direct, review, and iterate.
 
 **Required reading before Week 2:**
-- `materials/TROUBLESHOOTING.md` -- You WILL hit errors this week. Read this first so you know how to handle them.
-- `materials/SETUP_AND_DEPLOY.md` -- If your project uses Supabase, Stripe, or any external service, read the setup guide for that service before starting.
-- `materials/TROUBLESHOOTING.md` -- Skim the Common Issues section for Next.js, npm, and Supabase. You'll probably need them.
+- [Troubleshooting](/materials/troubleshooting) -- You WILL hit errors this week. Read this first so you know how to handle them.
+- [Setup and Deploy](/materials/setup-and-deploy) -- If your project uses Supabase, Stripe, or any external service, read the setup guide for that service before starting.
+- [Troubleshooting](/materials/troubleshooting) -- Skim the Common Issues section for Next.js, npm, and Supabase. You'll probably need them.
 
 ---
 
@@ -2358,9 +2358,9 @@ Fix this bug.
 > **Theme:** Go beyond "it works" to "it's good." Polish the UI, handle edge cases, optimize, and add features that make your project stand out.
 
 **Required reading before Week 3:**
-- `materials/STUDENT_HANDBOOK.md` (Part 2: Scope Cutting) -- If you're behind, read this NOW. It'll help you cut smartly and still ship something great.
-- `materials/QUICK_WINS.md` -- 18 small additions (5-15 min each) that make any project look 10x more polished. Pick 5-8 to add this week.
-- `materials/TROUBLESHOOTING.md` (Part 2: When You're Stuck) -- If you've been stuck on something for more than 15 minutes, follow the unstuck ladder.
+- [Student Handbook](/materials/student-handbook) (Part 2: Scope Cutting) -- If you're behind, read this NOW. It'll help you cut smartly and still ship something great.
+- [Quick Wins](/materials/quick-wins) -- 18 small additions (5-15 min each) that make any project look 10x more polished. Pick 5-8 to add this week.
+- [Troubleshooting](/materials/troubleshooting) (Part 2: When You're Stuck) -- If you've been stuck on something for more than 15 minutes, follow the unstuck ladder.
 
 **Week 3 Reality Check:**
 Before starting Week 3, answer honestly:
@@ -2791,9 +2791,9 @@ Clean up the codebase:
 > **Theme:** Get your project live on the internet, document it, prepare your presentation, and launch to the world.
 
 **Required reading before Week 4:**
-- `materials/SETUP_AND_DEPLOY.md` -- Step-by-step deployment instructions for Vercel, Netlify, Railway, Cloudflare Workers, Chrome Web Store, and Figma plugins.
-- `materials/SETUP_AND_DEPLOY.md` (the "Vercel" section) -- You'll need to add all your env variables to Vercel's dashboard.
-- `materials/STUDENT_HANDBOOK.md` (the "Ship It Checklist") -- Make sure you can check every box before Demo Day.
+- [Setup and Deploy](/materials/setup-and-deploy) -- Step-by-step deployment instructions for Vercel, Netlify, Railway, Cloudflare Workers, Chrome Web Store, and Figma plugins.
+- [Setup and Deploy](/materials/setup-and-deploy) (the "Vercel" section) -- You'll need to add all your env variables to Vercel's dashboard.
+- [Student Handbook](/materials/student-handbook) (the "Ship It Checklist") -- Make sure you can check every box before Demo Day.
 
 ---
 

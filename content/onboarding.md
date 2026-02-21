@@ -23,34 +23,36 @@ This is not a course where you watch videos and take notes. You will be building
 
 Complete everything on this list before the first live session. Budget 2-3 hours.
 
-**Deadline: [DATE - to be filled in per cohort]**
+**Deadline: March 1st (the day before cohort starts)**
 
 ### 1. Set Up Your Development Environment
 
+> The commands below are run in your **Terminal** (Mac/Linux) or **Command Prompt** (Windows). Search for either app on your device to open it.
+
 - [ ] Install [VS Code](https://code.visualstudio.com/) or [Cursor](https://cursor.com/) (if Cursor is your primary tool, use that as your editor)
 - [ ] Install [Node.js](https://nodejs.org/) (LTS version)
-- [ ] Install [Git](https://git-scm.com/) and set up your identity:
+- [ ] Install [Git](https://git-scm.com/) and set up your identity by running these commands in your terminal:
   ```bash
   git config --global user.name "Your Name"
   git config --global user.email "your@email.com"
   ```
-- [ ] Install [GitHub CLI](https://cli.github.com/) and log in: `gh auth login`
-- [ ] Install [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code): run `npm install -g @anthropic-ai/claude-code`
+- [ ] Install [GitHub CLI](https://cli.github.com/) and log in by running `gh auth login` in your terminal
+- [ ] Install [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) by running `npm install -g @anthropic-ai/claude-code` in your terminal
 - [ ] (Optional) Install [Docker](https://docker.com/) if you are building a backend-heavy project
 - [ ] (Optional) Install [Figma](https://figma.com/) desktop app if you are on the designer track
 
 ### 2. Create Your Accounts
 
 - [ ] [GitHub](https://github.com/) account (you will push all your code here)
-- [ ] [Anthropic API key](https://console.anthropic.com/) (needed for Claude Code)
-- [ ] [OpenAI account](https://platform.openai.com/) (needed for Codex)
+- [ ] [Claude Code](https://claude.ai/download) account (sign up at claude.ai)
+- [ ] [ChatGPT Plus](https://chat.openai.com/) account (needed for Codex)
 - [ ] [Cursor account](https://cursor.com/) (free tier works)
 - [ ] [Vercel](https://vercel.com/) or [Netlify](https://netlify.com/) account (for deploying your project)
 - [ ] [Supabase](https://supabase.com/) or [Firebase](https://firebase.google.com/) account (if your project needs a database)
 
 ### 3. Test That Everything Works
 
-Open your terminal and run these commands. If they work, you are good to go:
+Open your **Terminal** (Mac/Linux) or **Command Prompt** (Windows) and run these commands. You can find these apps by searching "Terminal" or "Command Prompt" on your device. If the commands work, you are good to go:
 
 ```bash
 node --version      # Should show v18 or higher
@@ -75,7 +77,7 @@ Post your project brief in the **#show-your-work** channel before the first sess
 
 ## Communication Channels
 
-We use [Slack/Discord] for all program communication. Here is how the channels work:
+We use **Discord** for all program communication. You will receive your invite link on **February 28th**. Here is how the channels work:
 
 | Channel | What it is for |
 |---|---|
@@ -86,13 +88,13 @@ We use [Slack/Discord] for all program communication. Here is how the channels w
 | **#resources** | Useful articles, tools, and tutorials shared by anyone |
 | **#off-topic** | Non-program stuff. Memes welcome. |
 
-**Join link:** [TO BE FILLED IN PER COHORT]
+**Join link:** Invite will be sent to your email on February 28th.
 
 ### How to Use the Channels
 
 - **When you are stuck:** Post in #help. Include what you tried, what happened, and a screenshot or code snippet. The more context you give, the faster someone can help.
 - **When you make progress:** Post in #show-your-work. Even small wins count. A screenshot of your first page rendering is worth sharing.
-- **When you have a question about the program:** Post in #general or DM @darasoba.
+- **When you have a question about the program:** Post in #general or DM @darasoba on Discord.
 
 ---
 
@@ -113,7 +115,7 @@ If the AI cannot solve it, post in #help with:
 - A link to your code (GitHub or code snippet)
 
 ### 3. Office Hours
-Every Wednesday at [TIME] [TIMEZONE], there is a live drop-in session. Come with your questions. Screen-sharing and live debugging happen here. This is the fastest way to get unstuck on hard problems.
+There is a weekly live drop-in session. The schedule and link will be announced on Discord. Come with your questions. Screen-sharing and live debugging happen here. This is the fastest way to get unstuck on hard problems.
 
 ### 4. Peer Support
 Your cohort members are building things too. Help each other. If you see a question in #help that you can answer, jump in. Teaching others is one of the best ways to learn.
@@ -250,11 +252,11 @@ These will be updated per cohort:
 
 | Resource | Link |
 |---|---|
-| Community (Slack/Discord) | [TO BE ADDED] |
-| Live session Zoom link | [TO BE ADDED] |
-| Curriculum document | [TO BE ADDED] |
-| Session recordings | [TO BE ADDED] |
-| Office hours booking | [TO BE ADDED] |
+| Community (Discord) | Invite sent February 28th |
+| Live session Zoom link | Will be announced on Discord |
+| Curriculum document | Will be announced on Discord |
+| Session recordings | Will be announced on Discord |
+| Office hours booking | Will be announced on Discord |
 | Mentor DM | @darasoba |
 
 ---

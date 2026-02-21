@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Logo } from '@/components/ui/logo'
-import html2canvas from 'html2canvas'
 
 const CARD_FILTERS = ['none', 'hue-rotate(160deg)', 'hue-rotate(270deg)']
 
@@ -30,7 +29,6 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
   const [mobileOpen, setMobileOpen] = useState(false)
   const [badgeOpen, setBadgeOpen] = useState(false)
   const badgeTimeout = useRef<NodeJS.Timeout | null>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
@@ -63,31 +61,31 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
 
   const fullName = userName || 'Student'
 
-  // Same download logic as welcome page: html2canvas with onclone to hide text overlay
+  // Load SVG directly to canvas — bypasses html2canvas and its Tailwind v4 lab() color errors
   const handleDownload = useCallback(async () => {
-    if (!cardRef.current) return
     try {
-      const raw = await html2canvas(cardRef.current, {
-        scale: 4,
-        useCORS: true,
-        backgroundColor: null,
-        onclone: (_doc: Document, el: HTMLElement) => {
-          const overlay = el.querySelector('[data-text-overlay]') as HTMLElement | null
-          if (overlay) overlay.style.display = 'none'
-        },
+      const svgPath = plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'
+
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = () => reject(new Error('Failed to load card SVG'))
+        img.src = svgPath
       })
 
-      const W = raw.width
-      const H = raw.height
+      const scale = 4
+      const W = img.naturalWidth * scale
+      const H = img.naturalHeight * scale
 
-      const final = document.createElement('canvas')
-      final.width = W
-      final.height = H
-      const ctx = final.getContext('2d')!
+      const canvas = document.createElement('canvas')
+      canvas.width = W
+      canvas.height = H
+      const ctx = canvas.getContext('2d')!
 
       const cssFilter = getCardFilter(fullName, plan || 'basic')
       if (cssFilter !== 'none') ctx.filter = cssFilter
-      ctx.drawImage(raw, 0, 0)
+      ctx.drawImage(img, 0, 0, W, H)
       ctx.filter = 'none'
 
       const name = (fullName || 'Cohort Member').toUpperCase()
@@ -141,7 +139,7 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
 
       const link = document.createElement('a')
       link.download = 'ship-with-ai-card.png'
-      link.href = final.toDataURL('image/png')
+      link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
       console.error('Failed to download card:', err)
@@ -170,9 +168,8 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
       onMouseLeave={hideBadge}
       onClick={(e) => e.stopPropagation()}
     >
-      {/* Card — same structure as welcome page */}
+      {/* Card preview */}
       <div
-        ref={cardRef}
         className="relative w-full overflow-hidden rounded-lg"
         style={{ aspectRatio: '784 / 931', filter: getCardFilter(fullName, plan || 'basic') }}
       >
@@ -183,11 +180,10 @@ export function PortalHeader({ userName, plan, cohortLabel = '' }: PortalHeaderP
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
         />
-        {/* Text overlay — no background needed since SVGs are clean */}
+        {/* Text overlay — covers baked-in SVG sample text on screen */}
         <div
-          data-text-overlay
           className="absolute flex flex-col justify-start pointer-events-none"
-          style={{ left: '13%', top: '28%', width: '60%', paddingTop: '1.5%' }}
+          style={{ left: '13%', top: '28%', width: '60%', paddingTop: '1.5%', backgroundColor: '#FBF6EE' }}
         >
           <p
             className="font-semibold text-left w-full uppercase line-clamp-2"

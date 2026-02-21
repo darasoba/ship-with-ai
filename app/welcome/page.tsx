@@ -4,7 +4,6 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import confetti from 'canvas-confetti'
-import html2canvas from 'html2canvas'
 import { Button } from '@/components/ui/button'
 import { COHORT_LABEL } from '@/lib/constants'
 
@@ -52,32 +51,31 @@ function CallbackContent() {
   }, [])
 
   const handleDownloadCard = useCallback(async () => {
-    if (!cardRef.current) return
     try {
-      // Use onclone to hide text in the CLONED DOM only — no flickering on the real page
-      const raw = await html2canvas(cardRef.current, {
-        scale: 4,
-        useCORS: true,
-        backgroundColor: null,
-        onclone: (_doc: Document, el: HTMLElement) => {
-          const overlay = el.querySelector('[data-text-overlay]') as HTMLElement | null
-          if (overlay) overlay.style.display = 'none'
-        },
+      const svgPath = plan === 'premium' ? '/card/card-bg-premium.svg' : '/card/card-bg.svg'
+
+      // Load SVG directly into an Image — bypasses html2canvas and its lab() color errors
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = () => reject(new Error('Failed to load card SVG'))
+        img.src = svgPath
       })
 
-      const W = raw.width
-      const H = raw.height
+      const scale = 4
+      const W = img.naturalWidth * scale
+      const H = img.naturalHeight * scale
 
-      // Create final canvas and draw the background
-      const final = document.createElement('canvas')
-      final.width = W
-      final.height = H
-      const ctx = final.getContext('2d')!
+      const canvas = document.createElement('canvas')
+      canvas.width = W
+      canvas.height = H
+      const ctx = canvas.getContext('2d')!
 
       // Apply CSS filter if needed
       const cssFilter = getCardFilter(fullName, plan)
       if (cssFilter !== 'none') ctx.filter = cssFilter
-      ctx.drawImage(raw, 0, 0)
+      ctx.drawImage(img, 0, 0, W, H)
       ctx.filter = 'none'
 
       // Draw text directly on canvas (matches the overlay position)
@@ -85,19 +83,16 @@ function CallbackContent() {
       const cohort = `${COHORT_LABEL}${plan === 'premium' ? ' · Premium' : ''}`
 
       const textX = W * 0.13
-      const textY = W * 0.055 + H * 0.23  // top + paddingTop + baseline offset
+      const textY = W * 0.055 + H * 0.23
       const maxW = W * 0.58
 
-      // Name — bold, sized to fit in max 2 lines
       let nameFontSize = W * 0.055
       ctx.font = `700 ${nameFontSize}px Inter, sans-serif`
-      // Shrink font if a single word is wider than the box
       while (ctx.measureText(name.split(' ').sort((a, b) => b.length - a.length)[0] || name).width > maxW && nameFontSize > W * 0.03) {
         nameFontSize -= 1
         ctx.font = `700 ${nameFontSize}px Inter, sans-serif`
       }
 
-      // Word-wrap name into lines (max 2)
       const words = name.split(' ')
       const lines: string[] = []
       let currentLine = ''
@@ -111,9 +106,8 @@ function CallbackContent() {
         }
       }
       if (currentLine) lines.push(currentLine)
-      const nameLines = lines.slice(0, 2) // max 2 lines
+      const nameLines = lines.slice(0, 2)
 
-      // Apply slight rotation to match CSS transform
       ctx.save()
       ctx.translate(textX, textY)
       ctx.rotate(-1.75 * Math.PI / 180)
@@ -126,7 +120,6 @@ function CallbackContent() {
         ctx.fillText(line, 0, i * lineHeight)
       })
 
-      // Cohort label
       const cohortY = nameLines.length * lineHeight + nameFontSize * 0.15
       const cohortFontSize = W * 0.03
       ctx.font = `500 ${cohortFontSize}px Inter, sans-serif`
@@ -137,7 +130,7 @@ function CallbackContent() {
 
       const link = document.createElement('a')
       link.download = 'ship-with-ai-card.png'
-      link.href = final.toDataURL('image/png')
+      link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
       console.error('Failed to download card:', err)
