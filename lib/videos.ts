@@ -6,6 +6,10 @@ export interface Video {
 }
 
 export type VideoCategory =
+  | 'vibe-coding'
+  | 'ai-tips'
+  | 'prompting'
+  | 'shipping'
   | 'ai-tools'
   | 'javascript-react'
   | 'nextjs'
@@ -16,6 +20,10 @@ export type VideoCategory =
   | 'building'
 
 export const VIDEO_CATEGORY_LABELS: Record<VideoCategory, string> = {
+  'vibe-coding': 'Vibecoding with Cursor, Claude Code & Codex',
+  'ai-tips': 'Tips & Tricks for AI Coding',
+  'prompting': 'AI Prompting',
+  'shipping': 'Shipping a Full App with AI',
   'ai-tools': 'AI Tools',
   'javascript-react': 'JavaScript & React',
   'nextjs': 'Next.js',
@@ -27,6 +35,10 @@ export const VIDEO_CATEGORY_LABELS: Record<VideoCategory, string> = {
 }
 
 export const VIDEO_CATEGORIES: VideoCategory[] = [
+  'vibe-coding',
+  'ai-tips',
+  'prompting',
+  'shipping',
   'ai-tools',
   'javascript-react',
   'nextjs',
@@ -38,6 +50,182 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
 ]
 
 export const VIDEOS: Video[] = [
+  // Vibecoding with Cursor, Claude Code & Codex
+  {
+    id: 'fu7NZ3t3sLM',
+    title: 'Ditch Unity: How I Vibe Code 3D Games With AI – Full Tutorial (Codex CLI, Claude Code, Cursor)',
+    channel: 'AI Oriented Dev',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'iLCDSY2XX7E',
+    title: 'Vibe Coding Fundamentals In 33 Minutes',
+    channel: 'Tina Huang',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'qEs7UHZSfrg',
+    title: 'Codex vs Claude Code: Which AI Coding Agent is Better?',
+    channel: 'Builder.io',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'mwDUYR8SjJs',
+    title: 'GPT-5.2-Codex vs Claude Code Opus 4.5 – Vibe Coding a Physical Product',
+    channel: 'Bijan Bowen',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'NnYLzGMk8Tg',
+    title: 'We Built 2 FULL Video Games In 7 Prompts (Claude Code vs GPT-5 Codex)',
+    channel: 'Riley Brown',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'vxFurJzG58Y',
+    title: 'How I Use AI for Laravel: Cursor, Claude Code, Codex (1-Hour Course)',
+    channel: 'Laravel Daily',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'PLKrSVuT-Dg',
+    title: 'How to Make Vibe Coding Not Suck…',
+    channel: 'Fireship',
+    category: 'vibe-coding',
+  },
+
+  // Tips & Tricks for AI Coding
+  {
+    id: 'uwA3MMYBfAQ',
+    title: 'AI Coding 101: Ultimate Prompt Guide (37 Tips)',
+    channel: 'Volo Builds',
+    category: 'ai-tips',
+  },
+  {
+    id: 'WVeYLlKOWc0',
+    title: 'Cursor Agent: 10 Pro Tips!',
+    channel: 'Cursor',
+    category: 'ai-tips',
+  },
+  {
+    id: 'Ffh9OeJ7yxw',
+    title: '800+ Hours of Learning Claude Code in 8 Minutes (2026 Tutorial / Unknown Tricks)',
+    channel: 'Edmund Yong',
+    category: 'ai-tips',
+  },
+  {
+    id: 'WwdIYp5fuxY',
+    title: 'My Top 6 Tips & Ways of Using Claude Code Efficiently',
+    channel: 'Academind',
+    category: 'ai-tips',
+  },
+  {
+    id: 'iltdFNpl73I',
+    title: '900+ Hours of Learning Claude Code/Cursor in 10 Minutes',
+    channel: 'Andrew Codesmith',
+    category: 'ai-tips',
+  },
+  {
+    id: 'qA6zfVDuXmI',
+    title: 'It Took Me 847 Hours in Cursor to Learn These 15 Hacks',
+    channel: 'Robin Ebers',
+    category: 'ai-tips',
+  },
+  {
+    id: 'YtTWNzOtkxU',
+    title: '5 Tips to Make You a PRO at Cursor',
+    channel: 'Supabase',
+    category: 'ai-tips',
+  },
+  {
+    id: 'ukgAjLLQg2A',
+    title: 'This Cursor Setup Changes Everything (Claude Code)',
+    channel: 'Robin Ebers',
+    category: 'ai-tips',
+  },
+  {
+    id: 'rfDvkSkelhg',
+    title: '6 Months of Claude Code Lessons in 27 Minutes',
+    channel: 'AI with Avthar',
+    category: 'ai-tips',
+  },
+  {
+    id: 'wsIb_EdhcY8',
+    title: 'The AI Workflow Nobody\'s Talking About (Claude Code + Cursor)',
+    channel: 'Ankita Kulkarni',
+    category: 'ai-tips',
+  },
+
+  // AI Prompting
+  {
+    id: '7WuKgc3-_-s',
+    title: 'You\'re Prompting Claude Code Wrong. Here\'s How to Do It Correctly…',
+    channel: 'Alex Finn',
+    category: 'prompting',
+  },
+  {
+    id: '4m8AgfeK6kU',
+    title: 'CLAUDE.md and Agents.md Explained: Stop Repeating Yourself to AI',
+    channel: 'GritAI Studio',
+    category: 'prompting',
+  },
+  {
+    id: '-uW5-TaVXu4',
+    title: 'Most Devs Don\'t Understand How Context Windows Work',
+    channel: 'Matt Pocock',
+    category: 'prompting',
+  },
+  {
+    id: 'H3M95i4iS5c',
+    title: 'Essential AI Prompts for Developers',
+    channel: 'Visual Studio Code',
+    category: 'prompting',
+  },
+
+  // Shipping a Full App with AI
+  {
+    id: '2JEzjfs6Kew',
+    title: 'Full Claude Code App Building Course in One Video (2+ Hours)',
+    channel: 'Build Great Products',
+    category: 'shipping',
+  },
+  {
+    id: 'Qcxq4iXLZbY',
+    title: 'Full App Building Course with Cursor (3+ Hours)',
+    channel: 'Build Great Products',
+    category: 'shipping',
+  },
+  {
+    id: 'li788UL1qyI',
+    title: 'Be a 10x Vibe Coder (Claude Code + Cursor + MCP)',
+    channel: 'Greg Isenberg',
+    category: 'shipping',
+  },
+  {
+    id: 'MZjW7mlRgdw',
+    title: 'Build Better Apps with AI Using This One Simple Document (PRD Guide)',
+    channel: 'jordanUrbsAI',
+    category: 'shipping',
+  },
+  {
+    id: '2FJlhoDYNPE',
+    title: 'AI Coding Masterclass: From Beginner to Expert in 90 Minutes',
+    channel: 'Riley Brown',
+    category: 'shipping',
+  },
+  {
+    id: 'VxD7_MRPebY',
+    title: 'Vibe Coding Masterclass: Build Your First App with AI in 37 Minutes (Claude Code)',
+    channel: 'Alex Finn',
+    category: 'shipping',
+  },
+  {
+    id: 'dH4mc9VQ96g',
+    title: 'TaskMaster AI and Cursor Setup Guide for Vibe Coding Entire Apps with Claude Sonnet',
+    channel: 'Morning Maker Show',
+    category: 'shipping',
+  },
+
   // AI Tools
   {
     id: 'GepHGs_CZdk',
@@ -65,7 +253,7 @@ export const VIDEOS: Video[] = [
   },
   {
     id: 'Tw18-4U7mts',
-    title: "The \"Vibe Coding\" Mind Virus Explained",
+    title: 'The "Vibe Coding" Mind Virus Explained',
     channel: 'Fireship',
     category: 'ai-tools',
   },
@@ -99,7 +287,7 @@ export const VIDEOS: Video[] = [
   // Next.js
   {
     id: 'Sklc_fQBmcs',
-    title: 'Next.js in 100 Seconds // Plus Full Beginner\'s Tutorial',
+    title: "Next.js in 100 Seconds // Plus Full Beginner's Tutorial",
     channel: 'Fireship',
     category: 'nextjs',
   },
