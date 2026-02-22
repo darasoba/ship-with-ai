@@ -528,14 +528,6 @@ export const CURRICULUM_SECTIONS: CurriculumWeek[] = [
         topic: 'Day 6 — Project Scaffolding: From PRD to Running Code + First Real Feature',
         videos: [
           { id: '-LFB8D9WV-g', title: 'Learn to Vibe Code in 10 Minutes (Full Beginners Tutorial)' },
-          { id: '557FJM_nhNk', title: 'My New AI Coding Workflow To Build Apps Fast' },
-        ],
-      },
-      {
-        topic: 'Day 7 — Week 1 Review, Project Check-In, Peer Review',
-        videos: [
-          { id: 'M8t4FgexZzU', title: 'Vibe Coding Fundamentals In 33 Minutes' },
-          { id: 'rj1bwTcqH20', title: "I Tried Every AI Coding Agent... Here's My 2026 Setup" },
         ],
       },
     ],
@@ -555,7 +547,6 @@ export const CURRICULUM_SECTIONS: CurriculumWeek[] = [
         topic: 'Day 9 — Responsive Design + UI Polish Sprint',
         videos: [
           { id: 'aQoJNVZcPSc', title: 'Setup VS Code for Web & AI App Building!' },
-          { id: 'lXLQjqbFX4s', title: 'My New AI Coding Workflow To Build Apps Fast (Goodbye Cursor, Hello Claude Code)' },
         ],
       },
       {
@@ -575,7 +566,6 @@ export const CURRICULUM_SECTIONS: CurriculumWeek[] = [
       {
         topic: 'Days 12–13 — Feature Building Sprint: Breaking Features Down, Prompting Strategies',
         videos: [
-          { id: 't9e5_Z4E0Wk', title: 'Cursor 2.0 — Full Tutorial for Beginners' },
           { id: 'WVeYLlKOWc0', title: 'Cursor Agent: 10 Pro Tips!', channel: 'Cursor' },
         ],
       },
@@ -658,13 +648,6 @@ export const CURRICULUM_SECTIONS: CurriculumWeek[] = [
         topic: 'Days 26–27 — Peer Review Workshop + Final Polish + Launch Checklist',
         videos: [
           { id: 'Oaj3RBIoGFc', title: "GitHub Basics Made Easy: A Fast Beginner's Tutorial!" },
-          { id: 'lXLQjqbFX4s', title: 'My New AI Coding Workflow To Build Apps Fast' },
-        ],
-      },
-      {
-        topic: 'Day 28 — Demo Day + Graduation',
-        videos: [
-          { id: 'rj1bwTcqH20', title: "I Tried Every AI Coding Agent... Here's My 2026 Setup" },
         ],
       },
     ],
