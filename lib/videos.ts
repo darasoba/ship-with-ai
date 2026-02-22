@@ -430,3 +430,277 @@ export function getVideoThumbnail(videoId: string): string {
 export function getVideoUrl(videoId: string): string {
   return `https://www.youtube.com/watch?v=${videoId}`
 }
+
+// ─── Curriculum-aligned videos ───────────────────────────────────────────────
+
+export interface CurriculumVideo {
+  id: string
+  title: string
+  channel?: string
+}
+
+export interface CurriculumTopic {
+  topic: string
+  videos: CurriculumVideo[]
+}
+
+export interface CurriculumWeek {
+  week: string
+  label: string
+  topics: CurriculumTopic[]
+}
+
+export const CURRICULUM_SECTIONS: CurriculumWeek[] = [
+  {
+    week: 'prework',
+    label: 'Pre-Work',
+    topics: [
+      {
+        topic: 'Environment Setup',
+        videos: [
+          { id: 'ocMOZpuAMw4', title: 'Cursor Tutorial for Beginners (AI Code Editor)', channel: 'Tech With Tim' },
+          { id: 'fG6HV3pxtOI', title: 'The VS Code/Cursor Setup to INCREASE Productivity (2025)' },
+        ],
+      },
+      {
+        topic: 'Accounts Needed & Cost Expectations',
+        videos: [
+          { id: '5ctJiEQmdng', title: "GitHub Account Setup for AI Development: Beginner's Guide 2024" },
+          { id: 'sqj2ATbL7x8', title: 'Best AI Coding Tool in 2025? (Cursor vs Claude Code)' },
+        ],
+      },
+      {
+        topic: 'Git & GitHub Basics',
+        videos: [
+          { id: 'a9u2yZvsqHA', title: 'How To Use GitHub For Beginners' },
+          { id: 'mAFoROnOfHs', title: 'Git & GitHub Crash Course for Beginners [2026]' },
+        ],
+      },
+      {
+        topic: 'Pre-Read + Project Brief / PRD Setup',
+        videos: [
+          { id: 'MZjW7mlRgdw', title: 'Build Better Apps with AI Using This One Simple Document (PRD Guide)', channel: 'jordanUrbsAI' },
+          { id: 'nbnD2h4IP8I', title: 'Claude Code + Cursor + GitHub: The New AI Environment Setup' },
+        ],
+      },
+    ],
+  },
+  {
+    week: 'week1',
+    label: 'Week 1: Foundations',
+    topics: [
+      {
+        topic: 'Day 1 — AI Coding Mental Model: Assistants vs. Agents vs. Pair Programmers',
+        videos: [
+          { id: '5fhcklZe-qE', title: 'Everything You Need to Know About Coding with AI // NOT Vibe Coding' },
+          { id: 'BAig5L3EM44', title: 'Top 10 AI Coding Assistants That Will 10x Your Development in 2025' },
+        ],
+      },
+      {
+        topic: 'Day 2 — Deep Dive into Cursor, Claude Code, and OpenAI Codex',
+        videos: [
+          { id: '97FYys-kj58', title: "I Used Both Claude Code and Codex for Weeks — Here's What Surprised Me" },
+          { id: 'vxFurJzG58Y', title: 'How I Use AI for Laravel: Cursor, Claude Code, Codex (1-Hour Course)', channel: 'Laravel Daily' },
+        ],
+      },
+      {
+        topic: 'Day 3 — Supplementary Tools: Bolt.new, Lovable, v0, Windsurf, Replit Agent',
+        videos: [
+          { id: '48_MlEfci_M', title: 'Lovable vs Replit (2025) | Which One is Better?' },
+          { id: 'ud0bv2J3xWY', title: 'The Best Vibe Coding Tools in 2026' },
+        ],
+      },
+      {
+        topic: 'Day 4 — Prompting for Code: 5 Prompting Principles + Prompt Templates',
+        videos: [
+          { id: 'P08jrZhyNxw', title: 'How to Write Perfect AI Prompts in 2025 (Complete Guide)' },
+          { id: 'uwA3MMYBfAQ', title: 'AI Coding 101: Ultimate Prompt Guide (37 Tips)', channel: 'Volo Builds' },
+        ],
+      },
+      {
+        topic: 'Day 5 — Writing Your PRD + Setting Up CLAUDE.md / Cursor Rules',
+        videos: [
+          { id: 'i_OHQH4-M2Y', title: 'Claude Code Tutorial #2 — CLAUDE.md Files & /init' },
+          { id: 'iltdFNpl73I', title: '900+ Hours of Learning Claude Code/Cursor in 10 Minutes', channel: 'Andrew Codesmith' },
+        ],
+      },
+      {
+        topic: 'Day 6 — Project Scaffolding: From PRD to Running Code + First Real Feature',
+        videos: [
+          { id: '-LFB8D9WV-g', title: 'Learn to Vibe Code in 10 Minutes (Full Beginners Tutorial)' },
+          { id: '557FJM_nhNk', title: 'My New AI Coding Workflow To Build Apps Fast' },
+        ],
+      },
+      {
+        topic: 'Day 7 — Week 1 Review, Project Check-In, Peer Review',
+        videos: [
+          { id: 'M8t4FgexZzU', title: 'Vibe Coding Fundamentals In 33 Minutes' },
+          { id: 'rj1bwTcqH20', title: "I Tried Every AI Coding Agent... Here's My 2026 Setup" },
+        ],
+      },
+    ],
+  },
+  {
+    week: 'week2',
+    label: 'Week 2: Build',
+    topics: [
+      {
+        topic: 'Day 8 — Design-to-Code: Figma → Code (MCP), Screenshot-to-Code, Component Libraries',
+        videos: [
+          { id: 'yO3Wr7DEWF0', title: 'The OFFICIAL Figma MCP Server — Tutorial & Demo' },
+          { id: 'riFFyTRljic', title: 'Claude Code to Figma' },
+        ],
+      },
+      {
+        topic: 'Day 9 — Responsive Design + UI Polish Sprint',
+        videos: [
+          { id: 'aQoJNVZcPSc', title: 'Setup VS Code for Web & AI App Building!' },
+          { id: 'lXLQjqbFX4s', title: 'My New AI Coding Workflow To Build Apps Fast (Goodbye Cursor, Hello Claude Code)' },
+        ],
+      },
+      {
+        topic: 'Day 10 — Backend & Data: Supabase Setup, Auth, API Routes',
+        videos: [
+          { id: 'kyphLGnSz6Q', title: 'Supabase Full Course 2025 | Become a Supabase Pro in 1.5 Hours' },
+          { id: 'pmJNbRl1tZ8', title: 'Supabase Is INSANE in 2025 — Build Your Entire Backend in Minutes' },
+        ],
+      },
+      {
+        topic: 'Day 11 — Backend Sprint Continues: Common Backend Patterns',
+        videos: [
+          { id: 'eur8dUO9mvE', title: 'What is MCP? Integrate AI Agents with Databases & APIs' },
+          { id: 'oHhv-0bm2is', title: 'Google AI Studio Just Replaced Every AI App Builder (It\'s FREE)' },
+        ],
+      },
+      {
+        topic: 'Days 12–13 — Feature Building Sprint: Breaking Features Down, Prompting Strategies',
+        videos: [
+          { id: 't9e5_Z4E0Wk', title: 'Cursor 2.0 — Full Tutorial for Beginners' },
+          { id: 'WVeYLlKOWc0', title: 'Cursor Agent: 10 Pro Tips!', channel: 'Cursor' },
+        ],
+      },
+      {
+        topic: 'Day 14 — Week 2 Milestone Check-In + Bug Fixing with AI',
+        videos: [
+          { id: 'NuKrtiJqW3Y', title: 'Claude Released Something To Fix Your Errors' },
+          { id: 'HIp8sFB2GGw', title: "Cursor 2.0 is Here... 5 Things You Didn't Know It Can Do" },
+        ],
+      },
+    ],
+  },
+  {
+    week: 'week3',
+    label: 'Week 3: Polish & Expand',
+    topics: [
+      {
+        topic: 'Day 15 — UI/UX Polish: Animations, Framer Motion, Design Details',
+        videos: [
+          { id: '9-fO_2xTpgY', title: 'React Animation Course with Motion — Become an Animations Pro in 1 Hour' },
+          { id: '1w6HIurOqjw', title: 'Framer Complete Course 2025' },
+        ],
+      },
+      {
+        topic: 'Day 16 — Testing & Error Handling: AI-Generated Tests, Edge Cases',
+        videos: [
+          { id: 'wl6ORZBXGis', title: 'AI-Powered Test Automation: Self-Healing + Visual Testing' },
+          { id: 'MNQUxkpD95g', title: 'Should You Prioritize AI Generated Test Cases For Debugging?' },
+        ],
+      },
+      {
+        topic: 'Days 17–18 — Advanced Features: AI-Powered Features + Third-Party Integrations',
+        videos: [
+          { id: 'eur8dUO9mvE', title: 'What is MCP? Integrate AI Agents with Databases & APIs' },
+          { id: 'eMZmDH3T2bY', title: 'Claude Code Tutorial for Beginners' },
+        ],
+      },
+      {
+        topic: 'Days 19–20 — Performance, Security Audit, Code Cleanup',
+        videos: [
+          { id: '0fONene3OIA', title: 'The Ultimate Guide to Web Performance' },
+          { id: 'KUdqbIHn8Ic', title: 'Frontend System Design: The 2025 Web Performance Roadmap' },
+        ],
+      },
+      {
+        topic: 'Day 21 — Week 3 Review + Final Feature Push',
+        videos: [
+          { id: 'WwdIYp5fuxY', title: 'My Top 6 Tips & Ways of Using Claude Code Efficiently', channel: 'Academind' },
+          { id: 'Ffh9OeJ7yxw', title: '800+ Hours of Learning Claude Code in 8 Minutes (2026 Tutorial)', channel: 'Edmund Yong' },
+        ],
+      },
+    ],
+  },
+  {
+    week: 'week4',
+    label: 'Week 4: Ship It',
+    topics: [
+      {
+        topic: 'Day 22 — Deployment: Vercel, Custom Domain, Deployment Options',
+        videos: [
+          { id: 'D9eTEwNzqw0', title: 'How to Add Domain in Vercel [2026 Full Guide]' },
+          { id: 'k0cjBuQFFYA', title: 'How to Add a Custom Domain on Vercel in 2025 (Updated)' },
+        ],
+      },
+      {
+        topic: 'Day 23 — Documentation: README, Case Study, Screenshots',
+        videos: [
+          { id: 'eJW4cFNGCh8', title: 'How To Create README File For GitHub Repository' },
+          { id: 'z6bzwjwRZPE', title: 'README Files Explained: Key Elements for Every Project' },
+        ],
+      },
+      {
+        topic: 'Days 24–25 — Demo Video + Demo Day Presentation Prep',
+        videos: [
+          { id: 'Edj_zj4U_9s', title: 'How to Make a SaaS Product Demo Video [2026]' },
+          { id: 'ZK-rNEhJIDs', title: 'Product Demo Video | SaaS Explainer Video | Infinity' },
+        ],
+      },
+      {
+        topic: 'Days 26–27 — Peer Review Workshop + Final Polish + Launch Checklist',
+        videos: [
+          { id: 'Oaj3RBIoGFc', title: "GitHub Basics Made Easy: A Fast Beginner's Tutorial!" },
+          { id: 'lXLQjqbFX4s', title: 'My New AI Coding Workflow To Build Apps Fast' },
+        ],
+      },
+      {
+        topic: 'Day 28 — Demo Day + Graduation',
+        videos: [
+          { id: 'rj1bwTcqH20', title: "I Tried Every AI Coding Agent... Here's My 2026 Setup" },
+        ],
+      },
+    ],
+  },
+  {
+    week: 'reference',
+    label: 'Reference Sections',
+    topics: [
+      {
+        topic: 'Tool Cheat Sheets: Claude Code, Cursor, Codex',
+        videos: [
+          { id: 'eMZmDH3T2bY', title: 'Claude Code Tutorial for Beginners' },
+          { id: 'WwdIYp5fuxY', title: 'My Top 6 Tips & Ways of Using Claude Code Efficiently', channel: 'Academind' },
+        ],
+      },
+      {
+        topic: 'Prompt Library: Scaffold, CRUD, Debug, Refactor, Auth, Deploy',
+        videos: [
+          { id: 'uwA3MMYBfAQ', title: 'AI Coding 101: Ultimate Prompt Guide (37 Tips)', channel: 'Volo Builds' },
+          { id: 'P08jrZhyNxw', title: 'How to Write Perfect AI Prompts in 2025 (Complete Guide)' },
+        ],
+      },
+      {
+        topic: 'Project Ideas by Track (Designer / Developer / Product)',
+        videos: [
+          { id: 'Uk_AJMhIkZY', title: 'Build These 3 AI Projects for AI Product Managers With Examples That Will Get You Hired' },
+          { id: 'ud0bv2J3xWY', title: 'The Best Vibe Coding Tools in 2026' },
+        ],
+      },
+      {
+        topic: 'Schedule Overview, Mentorship Principles, FAQ',
+        videos: [
+          { id: '5fhcklZe-qE', title: 'Everything You Need to Know About Coding with AI // NOT Vibe Coding' },
+          { id: 'sqj2ATbL7x8', title: 'Best AI Coding Tool in 2025? (Cursor vs Claude Code)' },
+        ],
+      },
+    ],
+  },
+]

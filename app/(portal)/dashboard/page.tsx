@@ -81,12 +81,16 @@ export default async function DashboardPage() {
         </h1>
         <p className="text-muted mt-1 flex items-center gap-2">
           <span>Cohort {cohort} &middot; {hasStarted ? `Week ${currentWeek}` : 'Starts soon'}</span>
-          {plan === 'premium' && (
+          {plan === 'premium' ? (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gradient-to-r from-amber-500/15 to-orange-500/15 text-amber-600 dark:text-amber-400 rounded-full">
               <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
               Premium
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide border border-border text-muted rounded-full">
+              Basic
             </span>
           )}
         </p>
