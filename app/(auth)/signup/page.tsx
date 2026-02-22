@@ -82,23 +82,13 @@ function SignupForm() {
       return
     }
 
-    // Sync plan from application to profile
+    // Sync plan from application to profile via server-side route (bypasses RLS)
     if (applicationId) {
-      const { data: app } = await supabase
-        .from('applications')
-        .select('plan')
-        .eq('id', applicationId)
-        .single()
-
-      const plan = app?.plan || 'basic'
-
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await supabase
-          .from('profiles')
-          .update({ plan })
-          .eq('id', user.id)
-      }
+      await fetch('/api/auth/complete-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: inviteEmail, applicationId }),
+      })
     }
 
     await supabase
