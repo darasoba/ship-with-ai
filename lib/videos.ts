@@ -94,6 +94,32 @@ export const VIDEOS: Video[] = [
     category: 'vibe-coding',
   },
 
+  // OpenCode
+  {
+    id: 'Z0HglpK20ec',
+    title: 'OpenCode: NEW Agentic AI Coder! Open-Source Claude Code Alternative!',
+    channel: 'WorldofAI',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'ipY_e9sldFM',
+    title: 'OpenCode: The BEST AI Coding Agent Ever! BYE Gemini CLI & Claude Code!',
+    channel: 'WorldofAI',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'v4j1_qHLq9s',
+    title: 'OpenCode Desktop: BEST AI Coding Agent Ever + FULLY FREE!',
+    channel: 'WorldofAI',
+    category: 'vibe-coding',
+  },
+  {
+    id: 'MsQACpcuTkU',
+    title: 'AI in the Terminal — Complete Guide (Gemini CLI, Claude Code, Codex, OpenCode)',
+    channel: 'NetworkChuck',
+    category: 'vibe-coding',
+  },
+
   // Tips & Tricks for AI Coding
   {
     id: 'uwA3MMYBfAQ',
@@ -497,10 +523,12 @@ export const CURRICULUM_SECTIONS: CurriculumWeek[] = [
         ],
       },
       {
-        topic: 'Day 2 — Deep Dive into Cursor, Claude Code, and OpenAI Codex',
+        topic: 'Day 2 — Deep Dive into Cursor, Claude Code, Codex, and OpenCode',
         videos: [
           { id: '97FYys-kj58', title: "I Used Both Claude Code and Codex for Weeks — Here's What Surprised Me" },
           { id: 'vxFurJzG58Y', title: 'How I Use AI for Laravel: Cursor, Claude Code, Codex (1-Hour Course)', channel: 'Laravel Daily' },
+          { id: 'Z0HglpK20ec', title: 'OpenCode: NEW Agentic AI Coder! Open-Source Claude Code Alternative!', channel: 'WorldofAI' },
+          { id: 'MsQACpcuTkU', title: 'AI in the Terminal — Complete Guide (Gemini CLI, Claude Code, Codex, OpenCode)', channel: 'NetworkChuck' },
         ],
       },
       {

@@ -42,6 +42,13 @@ Your complete reference for every AI coding tool in the program. Cheatsheets, co
   - [Common Commands](#common-commands)
   - [Model Selection](#model-selection)
   - [Configuration](#configuration)
+- [OpenCode Cheatsheet](#opencode-cheatsheet)
+  - [Installation](#installation)
+  - [Starting OpenCode](#starting-opencode)
+  - [Supported Providers](#supported-providers)
+  - [Key Features](#opencode-key-features)
+  - [Common Usage](#common-usage)
+  - [Configuration](#opencode-configuration)
 - [Side-by-Side Quick Reference](#side-by-side-quick-reference)
 - [Git and GitHub Cheatsheet](#git-and-github-cheatsheet)
   - [First-Time Setup](#first-time-setup-once-per-computer)
@@ -56,10 +63,11 @@ Your complete reference for every AI coding tool in the program. Cheatsheets, co
 - [Pro Tips](#pro-tips)
 
 ### Part 2: Tool Comparison & Selection Guide
-- [The Big Three: Claude Code vs Cursor vs Codex](#the-big-three-claude-code-vs-cursor-vs-codex)
+- [The Big Four: Claude Code vs Cursor vs Codex vs OpenCode](#the-big-four-claude-code-vs-cursor-vs-codex-vs-opencode)
   - [Claude Code (Anthropic)](#claude-code-anthropic)
   - [Cursor (Anysphere)](#cursor-anysphere)
   - [OpenAI Codex](#openai-codex)
+  - [OpenCode (Open Source)](#opencode-open-source)
 - [Head-to-Head Comparison Table](#head-to-head-comparison-table)
 - [Decision Flowchart](#decision-flowchart)
 - [Supplementary Tools](#supplementary-tools)
@@ -523,22 +531,125 @@ codex config list
 
 ---
 
+## OpenCode Cheatsheet
+
+OpenCode is a free, open-source, terminal-based AI coding agent. It works with any major AI provider — bring your own API key.
+
+### Installation
+
+```bash
+# Install globally
+npm install -g opencode-ai
+
+# Or run without installing
+npx opencode-ai
+```
+
+### Starting OpenCode
+
+```bash
+# Start interactive session
+opencode
+
+# Start with a prompt
+opencode "refactor the auth module to use async/await"
+
+# Start with a specific model
+opencode --model claude-opus-4-6
+```
+
+### Supported Providers
+
+| Provider | How to Set Key |
+|----------|---------------|
+| Anthropic (Claude) | `export ANTHROPIC_API_KEY=sk-ant-...` |
+| OpenAI | `export OPENAI_API_KEY=sk-...` |
+| Google Gemini | `export GOOGLE_API_KEY=...` |
+| Local (Ollama) | Configure in opencode config |
+
+### OpenCode Key Features
+
+| Feature | What It Does |
+|---------|-------------|
+| Multi-provider | Switch between Claude, GPT, Gemini, local models |
+| Interactive TUI | Clean terminal interface with real-time output |
+| MCP support | Connect to external tools via MCP servers |
+| Context files | Persistent project instructions (like CLAUDE.md) |
+| Open source | Fully transparent, community-driven |
+| BYOK | No extra subscription — pay only for API usage |
+
+### Common Usage
+
+```bash
+# Fix a bug
+opencode "fix the authentication error in src/auth.ts"
+
+# Build a feature
+opencode "add a dark mode toggle to the settings page"
+
+# Explain code
+opencode "explain what the middleware in proxy.ts does"
+
+# Refactor
+opencode "refactor src/utils to use TypeScript strict mode"
+```
+
+### OpenCode Configuration
+
+Create an `opencode.json` in your project root:
+
+```json
+{
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-6",
+  "context": [
+    "CLAUDE.md",
+    "docs/PRD.md"
+  ]
+}
+```
+
+Or use a project context file (works like CLAUDE.md):
+
+```markdown
+<!-- opencode-context.md -->
+# Project: My App
+
+## Stack
+- Next.js 15, TypeScript, Tailwind, Supabase
+
+## Rules
+- Use functional components
+- No any types
+- Handle loading and error states
+```
+
+### OpenCode Tips
+
+1. **BYOK saves money.** With your own API key, you pay only for what you use. Great for lighter tasks.
+2. **Switch models per task.** Use a cheaper, faster model for simple edits and a smarter one for architecture.
+3. **Same mental model as Claude Code.** If you know Claude Code, OpenCode feels familiar instantly.
+4. **Open source means customizable.** Fork it, modify it, or contribute features you need.
+5. **MCP support.** Connect to Figma, databases, or any MCP server — same as Claude Code.
+
+---
+
 ## Side-by-Side Quick Reference
 
 ### "I want to..." Decision Table
 
-| Task | Claude Code | Cursor | Codex |
-|------|------------|--------|-------|
-| Fix a single bug | `claude "fix the bug in auth.ts"` | `Cmd+K` on the code | `codex "fix the bug in auth.ts"` |
-| Build a new feature | `claude "add user profiles"` | `Cmd+I` Agent mode | `codex "add user profiles"` |
-| Explain code | `claude "explain this function"` | `Cmd+L` with selection | `codex "explain this function"` |
-| Refactor a module | `claude "refactor to TypeScript"` | `Cmd+Shift+I` Composer | `codex "refactor to TypeScript"` |
-| Run tests and fix | `claude "run tests, fix failures"` | Agent mode auto-runs | `codex "run tests and fix"` |
-| Quick inline edit | N/A (terminal-based) | `Cmd+K` inline | N/A (terminal-based) |
-| Review a PR | `/review` | `@git` in chat | `codex review` |
-| Create a commit | `/commit` | Standard git | `codex "commit these changes"` |
-| Search codebase | Built-in grep/glob | `@codebase` or `Cmd+Shift+F` | Built-in search |
-| Add to project rules | Edit CLAUDE.md | Edit .cursorrules | Config file |
+| Task | Claude Code | Cursor | Codex | OpenCode |
+|------|------------|--------|-------|---------|
+| Fix a single bug | `claude "fix the bug in auth.ts"` | `Cmd+K` on the code | `codex "fix the bug in auth.ts"` | `opencode "fix the bug in auth.ts"` |
+| Build a new feature | `claude "add user profiles"` | `Cmd+I` Agent mode | `codex "add user profiles"` | `opencode "add user profiles"` |
+| Explain code | `claude "explain this function"` | `Cmd+L` with selection | `codex "explain this function"` | `opencode "explain this function"` |
+| Refactor a module | `claude "refactor to TypeScript"` | `Cmd+Shift+I` Composer | `codex "refactor to TypeScript"` | `opencode "refactor to TypeScript"` |
+| Run tests and fix | `claude "run tests, fix failures"` | Agent mode auto-runs | `codex "run tests and fix"` | `opencode "run tests and fix"` |
+| Quick inline edit | N/A (terminal-based) | `Cmd+K` inline | N/A (terminal-based) | N/A (terminal-based) |
+| Review a PR | `/review` | `@git` in chat | `codex review` | Via prompt |
+| Create a commit | `/commit` | Standard git | `codex "commit these changes"` | `opencode "commit changes"` |
+| Search codebase | Built-in grep/glob | `@codebase` or `Cmd+Shift+F` | Built-in search | Built-in search |
+| Add to project rules | Edit CLAUDE.md | Edit .cursorrules | Config file | Context file |
 
 ### Setup Commands
 
@@ -555,6 +666,11 @@ claude  # starts session
 npm install -g @openai/codex
 export OPENAI_API_KEY=sk-...
 codex  # starts session
+
+# OpenCode
+npm install -g opencode-ai
+export ANTHROPIC_API_KEY=sk-ant-...  # or any supported provider
+opencode  # starts session
 ```
 
 ---
@@ -767,7 +883,7 @@ A straight-up comparison of every AI coding tool you should know about. No fluff
 
 ---
 
-## The Big Three: Claude Code vs Cursor vs Codex
+## The Big Four: Claude Code vs Cursor vs Codex vs OpenCode
 
 ### Claude Code (Anthropic)
 
@@ -890,23 +1006,62 @@ codex
 
 ---
 
+### OpenCode (Open Source)
+
+**What it is:** A free, open-source, terminal-based AI coding agent. Works with any major AI provider via your own API key.
+
+**Best for:**
+- Developers who want Claude Code's power without an extra subscription
+- Teams that want BYOK (bring your own key) flexibility
+- Developers who prefer open-source tools they can inspect and modify
+- Switching between different AI models depending on task complexity and cost
+
+**Strengths:**
+- Completely free and open source
+- Multi-provider: Claude, GPT-4, Gemini, local models (Ollama), and more
+- No separate subscription — pay only for API usage
+- Active community with rapid development
+- MCP server support for external tool connections
+- Familiar terminal-based workflow (same mental model as Claude Code)
+- Full source code transparency
+
+**Weaknesses:**
+- Less mature than Claude Code (newer project)
+- No built-in IDE integration
+- Smaller ecosystem than Claude Code's MCP library
+- You manage your own API keys and costs
+
+**Pricing:**
+- Free and open source
+- Pay only for API usage (e.g., Anthropic API, OpenAI API)
+- Anthropic API: usage-based, roughly $0.003–$0.015 per 1K tokens depending on model
+
+**Setup:**
+```bash
+npm install -g opencode-ai
+export ANTHROPIC_API_KEY=sk-ant-...
+opencode
+```
+
+---
+
 ## Head-to-Head Comparison Table
 
-| Feature | Claude Code | Cursor | Codex |
-|---------|------------|--------|-------|
-| **Interface** | Terminal (CLI) | IDE (VS Code fork) | Terminal (CLI) |
-| **Tab completion** | No | Yes | No |
-| **Inline editing** | No | Yes (Cmd+K) | No |
-| **Multi-file edits** | Yes | Yes (Agent mode) | Yes |
-| **Terminal commands** | Yes | Yes (Agent mode) | Yes |
-| **Image input** | No | Limited | Yes |
-| **Code review** | Yes (/review) | Via chat | Yes (codex review) |
-| **Custom rules** | CLAUDE.md | .cursorrules | Config file |
-| **Plugin system** | MCP + Hooks | VS Code extensions | MCP support |
-| **Open source** | No | No | Yes |
-| **Context window** | Up to 1M tokens | ~100K tokens | Large (GPT-5.3) |
-| **Best model** | Claude Opus 4.6 | Multiple (picks best) | GPT-5.3-Codex |
-| **Starting price** | $20/mo | Free tier | $20/mo (with Plus) |
+| Feature | Claude Code | Cursor | Codex | OpenCode |
+|---------|------------|--------|-------|---------|
+| **Interface** | Terminal (CLI) | IDE (VS Code fork) | Terminal (CLI) | Terminal (CLI) |
+| **Tab completion** | No | Yes | No | No |
+| **Inline editing** | No | Yes (Cmd+K) | No | No |
+| **Multi-file edits** | Yes | Yes (Agent mode) | Yes | Yes |
+| **Terminal commands** | Yes | Yes (Agent mode) | Yes | Yes |
+| **Image input** | No | Limited | Yes | No |
+| **Code review** | Yes (/review) | Via chat | Yes (codex review) | Via prompt |
+| **Custom rules** | CLAUDE.md | .cursorrules | Config file | Context file |
+| **Plugin system** | MCP + Hooks | VS Code extensions | MCP support | MCP support |
+| **Open source** | No | No | Yes | Yes |
+| **Context window** | Up to 1M tokens | ~100K tokens | Large (GPT-5.3) | Depends on model |
+| **Best model** | Claude Opus 4.6 | Multiple (picks best) | GPT-5.3-Codex | Any (BYOK) |
+| **Starting price** | $20/mo | Free tier | $20/mo (with Plus) | Free (BYOK) |
 
 ---
 
@@ -1061,6 +1216,9 @@ Use Lovable to prototype the app and get a working MVP. Then pull the code into 
 ### Combo 4: Cursor + Codex
 Use Cursor as your daily IDE. Use Codex for code reviews before pushing (`codex review`) and for image-to-code workflows when you have wireframes.
 
+### Combo 5: OpenCode + Cursor
+Use OpenCode in the terminal for heavy agentic tasks (it's free with your own API key). Use Cursor for day-to-day inline editing and tab completion. Best of both worlds at lower cost.
+
 ---
 
 ## Pricing Summary Table
@@ -1070,6 +1228,7 @@ Use Cursor as your daily IDE. Use Codex for code reviews before pushing (`codex 
 | Claude Code | Limited | $20-200/mo | $85-125/user/mo |
 | Cursor | Yes | $20/mo | $40/user/mo |
 | Codex | With Plus ($20/mo) | $20-200/mo | Enterprise pricing |
+| OpenCode | Free (BYOK) | Free (pay API costs) | Free (BYOK) |
 | Windsurf | 25 credits/mo | $15/mo | $30/user/mo |
 | v0 | Yes | $20/mo | N/A |
 | Bolt.new | Yes (open source) | Usage-based | N/A |
@@ -1081,6 +1240,8 @@ Use Cursor as your daily IDE. Use Codex for code reviews before pushing (`codex 
 ## Bottom Line
 
 **If you write code daily and want maximum power:** Claude Code or Codex in the terminal, Cursor as your editor.
+
+**If you want terminal power without a subscription:** OpenCode. Bring your own API key and use any model you like.
 
 **If you are new to AI coding:** Start with Cursor. Lowest learning curve, most visual feedback.
 

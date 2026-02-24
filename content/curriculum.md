@@ -19,7 +19,7 @@ slug: "curriculum"
 **Price:** Under $100 (one-time payment for the full 4 weeks)
 **Who it's for:** Designers, developers, and product people at any skill level
 **What you'll build:** YOUR project -- a website, app, plugin, or tool -- from idea to deployed product
-**Primary tools:** Claude Code, Cursor, OpenAI Codex
+**Primary tools:** Claude Code, Cursor, OpenAI Codex, OpenCode
 **Supplementary tools:** Windsurf, Bolt.new, Lovable, v0, Replit Agent
 
 ### The Promise
@@ -53,7 +53,7 @@ Once accepted, each participant is matched with:
 | Profile | Recommended Primary Tool | Why |
 |---|---|---|
 | Designer with no code experience | Cursor | Visual IDE, inline AI, easy onboarding |
-| Developer wanting CLI power | Claude Code | Terminal-native, agentic, full codebase awareness |
+| Developer wanting CLI power | Claude Code or OpenCode | Terminal-native, agentic, full codebase awareness |
 | Product person prototyping fast | Codex (ChatGPT) | Conversational, cloud-based, low setup |
 | Advanced dev building complex apps | Claude Code + Cursor | Combine CLI power with IDE comfort |
 | Designer building a plugin | Cursor + Claude Code | Cursor for UI, Claude Code for logic and APIs |
@@ -72,6 +72,7 @@ Complete before the first live session. Estimated time: 3-4 hours.
 - [ ] Install [VS Code](https://code.visualstudio.com/) or [Cursor](https://cursor.com/) (Cursor recommended -- it's a VS Code fork with AI built in)
 - [ ] Install [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) -- run: `npm install -g @anthropic-ai/claude-code`
 - [ ] Get access to [OpenAI Codex](https://openai.com/codex/) (ChatGPT Plus/Pro or API access)
+- [ ] Install [OpenCode](https://opencode.ai/) -- open-source terminal AI agent: `npm install -g opencode-ai`
 - [ ] Install [Node.js](https://nodejs.org/) (LTS version, currently v22)
 - [ ] Install [Git](https://git-scm.com/) and create a [GitHub](https://github.com/) account
 - [ ] Install a package manager: npm (comes with Node) or [bun](https://bun.sh/) (faster, recommended)
@@ -84,6 +85,7 @@ Complete before the first live session. Estimated time: 3-4 hours.
 - GitHub account (free)
 - Claude Code account -- sign up at [claude.ai](https://claude.ai)
 - ChatGPT Plus account (for Codex) -- sign up at [chat.openai.com](https://chat.openai.com/)
+- OpenCode -- open source, bring your own API key (Anthropic, OpenAI, or others)
 - Cursor account (free tier works)
 - Vercel or Netlify account (for deployment, both have free tiers)
 - Supabase or Firebase account (if building an app with a database, both have free tiers)
@@ -95,6 +97,7 @@ Complete before the first live session. Estimated time: 3-4 hours.
 | Claude Code | Free tier available, Claude Pro is $20/month | Sign up at claude.ai |
 | Cursor | Free tier available, Pro is $20/month | Free tier gives limited requests |
 | Codex | ChatGPT Plus ($20/month) or API usage | Codex in ChatGPT requires Plus or Pro |
+| OpenCode | Free and open source | Bring your own API key (Anthropic, OpenAI, etc.) |
 | Bolt.new / Lovable / v0 | Free tiers available | Good for quick prototypes |
 
 ### Git and GitHub: Why You Need This (Non-Negotiable)
@@ -309,7 +312,7 @@ This does not mean you don't need to understand code. You absolutely do. But you
 
 **3. Agentic AI Coders**
 - Autonomous agents that read your codebase, write code, run commands, fix errors, and iterate
-- Examples: Claude Code, Codex, Cursor Agent Mode, Windsurf Cascade, Replit Agent
+- Examples: Claude Code, Codex, OpenCode, Cursor Agent Mode, Windsurf Cascade, Replit Agent
 - Best for: Multi-file features, project scaffolding, full-stack work
 - Limitation: Need clear instructions; can go off-track if you're vague
 
@@ -332,10 +335,10 @@ This does not mean you don't need to understand code. You absolutely do. But you
 
 ---
 
-### Day 2: Deep Dive into the Three Primary Tools
+### Day 2: Deep Dive into the Four Primary Tools
 
 **Learning Objectives:**
-- Know the specific features, shortcuts, and workflows for Cursor, Claude Code, and Codex
+- Know the specific features, shortcuts, and workflows for Cursor, Claude Code, Codex, and OpenCode
 - Understand what MCP (Model Context Protocol) is and why it matters
 - Set up your primary tool with proper configuration
 
@@ -637,9 +640,71 @@ The key difference with Codex is that it runs in the cloud. You don't need a loc
 5. When done, check the GitHub repo it created
 6. Start a parallel task: "Add dark mode toggle to the portfolio" while the first task finishes
 
+---
+
+**Session Part 4: OpenCode -- The Open-Source Terminal Agent**
+
+OpenCode is an open-source, terminal-based AI coding agent. It's free to use and works with any major AI provider (Anthropic, OpenAI, Google Gemini, and more). Think of it as a community-built alternative to Claude Code -- fully transparent, customizable, and BYOK (bring your own key).
+
+**Key Features:**
+
+| Feature | What It Does |
+|---|---|
+| Multi-provider | Works with Claude, GPT-4, Gemini, local models, and more |
+| Open source | Full source code available, community-driven development |
+| Terminal-based | Runs in your shell like Claude Code -- no IDE needed |
+| Interactive TUI | Clean terminal interface with real-time progress |
+| Context files | Supports project context files for persistent instructions |
+| MCP support | Connects to MCP servers for external tools |
+
+**Installation:**
+
+```bash
+# Install globally
+npm install -g opencode-ai
+
+# Or run directly with npx
+npx opencode-ai
+```
+
+**Setting Up Your API Key:**
+
+```bash
+# With Anthropic (Claude models)
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# With OpenAI
+export OPENAI_API_KEY=sk-...
+
+# Start a session
+opencode
+```
+
+**Why OpenCode Matters:**
+
+OpenCode bridges the gap between Claude Code's power and true open-source flexibility. Because it's BYOK:
+- No extra subscription cost beyond your API key
+- Works with cheaper/faster models when you don't need full power
+- Fully customizable -- you can see exactly what it does under the hood
+- Active open-source community with rapid development
+
+**When to Choose OpenCode:**
+- You want terminal-based AI coding without a separate subscription
+- You want to switch between models based on cost/task complexity
+- You prefer open-source tools you can inspect and modify
+- You're already paying for API access and want to maximize it
+
+**Hands-On Exercise: OpenCode Sprint (20 minutes)**
+1. Install OpenCode: `npm install -g opencode-ai`
+2. Set your API key: `export ANTHROPIC_API_KEY=your-key`
+3. Navigate to a new folder: `mkdir opencode-test && cd opencode-test`
+4. Run `opencode` to start a session
+5. Type: "Create a simple to-do list app with HTML, CSS, and JavaScript. Make it look clean with a dark theme."
+6. Compare the experience to Claude Code -- notice the similarities and differences
+
 **Day 2 Homework:**
 1. Pick your primary tool based on your comfort level and project type
-2. Set up the configuration file for your primary tool (CLAUDE.md, .cursor/rules/project.mdc, or AGENTS.md)
+2. Set up the configuration file for your primary tool (CLAUDE.md, .cursor/rules/project.mdc, AGENTS.md, or opencode context file)
 3. Write a 1-paragraph description of your project in the configuration file
 4. Post a screenshot of your tool setup in the cohort channel
 

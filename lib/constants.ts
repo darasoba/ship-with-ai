@@ -86,7 +86,7 @@ export const MATERIALS_ORDER = [
   {
     slug: 'tool-reference',
     title: 'Tool Reference',
-    description: 'Cheatsheets and comparison guide for Claude Code, Cursor, and Codex.',
+    description: 'Cheatsheets and comparison guide for Claude Code, Cursor, Codex, and OpenCode.',
     category: 'core' as const,
   },
   {
