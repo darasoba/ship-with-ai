@@ -138,7 +138,7 @@ export default async function Home() {
 
       <main className="min-h-screen">
         {/* ── Hero (full viewport) ── */}
-        <div className="min-h-dvh flex flex-col justify-center">
+        {!ENROLLMENT_CLOSED && <div className="min-h-dvh flex flex-col justify-center">
           {/* ── Mentorship Illustration ── */}
           <div className="relative pt-20 md:pt-28 overflow-hidden">
             <div className="edge-fade max-w-md mx-auto px-6 opacity-60">
@@ -195,11 +195,11 @@ export default async function Home() {
               </FadeIn>
             </div>
           </section>
-        </div>
+        </div>}
 
         {/* ── Enrollment Status (only when closed) ── */}
         {ENROLLMENT_CLOSED && (
-          <section className="px-6 mt-20 md:mt-32">
+          <section id="waitlist" className="px-6 mt-20 md:mt-32">
             <div className="max-w-[580px] mx-auto">
               <FadeIn>
                 <h2 className="text-[28px] leading-[34px] md:text-[32px] md:leading-[38px] font-[600] tracking-tight text-foreground">
@@ -406,11 +406,19 @@ export default async function Home() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/apply?plan=basic" className="block mt-8">
-                    <Button size="lg" className="w-full">
-                      Apply now
-                    </Button>
-                  </Link>
+                  {ENROLLMENT_CLOSED ? (
+                    <a href="#waitlist" className="block mt-8">
+                      <Button size="lg" className="w-full">
+                        Join waitlist
+                      </Button>
+                    </a>
+                  ) : (
+                    <Link href="/apply?plan=basic" className="block mt-8">
+                      <Button size="lg" className="w-full">
+                        Apply now
+                      </Button>
+                    </Link>
+                  )}
                 </Card>
 
                 {/* Premium */}
@@ -448,11 +456,19 @@ export default async function Home() {
                         </li>
                       ))}
                     </ul>
-                    <Link href="/apply?plan=premium" className="block mt-8">
-                      <Button size="lg" className="w-full !border-[#B8860B]" style={{ backgroundColor: '#B8860B', color: '#fff' }}>
-                        Apply now
-                      </Button>
-                    </Link>
+                    {ENROLLMENT_CLOSED ? (
+                      <a href="#waitlist" className="block mt-8">
+                        <Button size="lg" className="w-full !border-[#B8860B]" style={{ backgroundColor: '#B8860B', color: '#fff' }}>
+                          Join waitlist
+                        </Button>
+                      </a>
+                    ) : (
+                      <Link href="/apply?plan=premium" className="block mt-8">
+                        <Button size="lg" className="w-full !border-[#B8860B]" style={{ backgroundColor: '#B8860B', color: '#fff' }}>
+                          Apply now
+                        </Button>
+                      </Link>
+                    )}
                   </Card>
                 )}
               </div>
@@ -484,45 +500,49 @@ export default async function Home() {
         </section>
 
         {/* ── Final CTA ── */}
-        <section className="px-6 mt-32 mb-20 md:mt-[120px] md:mb-24">
-          <div className="max-w-[580px] mx-auto text-center">
-            <FadeIn>
-              <h2 className="text-[32px] leading-[38px] md:text-[44px] md:leading-[48px] font-[650] tracking-tight text-foreground">
-                You&apos;ve got the idea.{' '}
-                <span className="text-foreground-secondary">
-                  Now build&nbsp;it.
-                </span>
-              </h2>
-            </FadeIn>
-            <FadeIn delay={100}>
-              <p className="mt-5 text-[17px] text-foreground-secondary">
-                Apply in 5 minutes. We&apos;ll get back to you within 48 hours.
-              </p>
-            </FadeIn>
-            <FadeIn delay={200}>
-              <div className="mt-8">
-                <Link href="/apply?plan=basic">
-                  <Button size="lg">Apply now&nbsp;&mdash;&nbsp;{startingPrice}</Button>
-                </Link>
-                <p className="mt-4 text-[13px] text-foreground-tertiary">
-                  Next cohort starts March 2026.
+        {!ENROLLMENT_CLOSED && (
+          <section className="px-6 mt-32 mb-20 md:mt-[120px] md:mb-24">
+            <div className="max-w-[580px] mx-auto text-center">
+              <FadeIn>
+                <h2 className="text-[32px] leading-[38px] md:text-[44px] md:leading-[48px] font-[650] tracking-tight text-foreground">
+                  You&apos;ve got the idea.{' '}
+                  <span className="text-foreground-secondary">
+                    Now build&nbsp;it.
+                  </span>
+                </h2>
+              </FadeIn>
+              <FadeIn delay={100}>
+                <p className="mt-5 text-[17px] text-foreground-secondary">
+                  Apply in 5 minutes. We&apos;ll get back to you within 48 hours.
                 </p>
-              </div>
-            </FadeIn>
-          </div>
-        </section>
+              </FadeIn>
+              <FadeIn delay={200}>
+                <div className="mt-8">
+                  <Link href="/apply?plan=basic">
+                    <Button size="lg">Apply now&nbsp;&mdash;&nbsp;{startingPrice}</Button>
+                  </Link>
+                  <p className="mt-4 text-[13px] text-foreground-tertiary">
+                    Next cohort starts March 2026.
+                  </p>
+                </div>
+              </FadeIn>
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />
 
       {/* Floating mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 p-4 bg-background/90 backdrop-blur-md border-t border-border-subtle md:hidden">
-        <Link href="/apply?plan=basic" className="block">
-          <Button size="lg" className="w-full">
-            Apply now&nbsp;&mdash;&nbsp;{startingPrice}
-          </Button>
-        </Link>
-      </div>
+      {!ENROLLMENT_CLOSED && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 p-4 bg-background/90 backdrop-blur-md border-t border-border-subtle md:hidden">
+          <Link href="/apply?plan=basic" className="block">
+            <Button size="lg" className="w-full">
+              Apply now&nbsp;&mdash;&nbsp;{startingPrice}
+            </Button>
+          </Link>
+        </div>
+      )}
     </>
   )
 }
