@@ -224,7 +224,7 @@ export default async function Home() {
                   />
                   <button
                     type="submit"
-                    className="px-5 py-3 rounded-xl bg-[#F5D76E] text-[#1a1a1a] text-[14px] font-semibold hover:bg-[#f0cf4e] transition-colors whitespace-nowrap"
+                    className="px-5 py-3 rounded-xl bg-white text-[#1a1a1a] text-[14px] font-semibold hover:bg-gray-100 transition-colors whitespace-nowrap"
                   >
                     Notify me
                   </button>

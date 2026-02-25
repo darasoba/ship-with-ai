@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
+import { ENROLLMENT_CLOSED } from '@/lib/constants'
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -54,15 +55,23 @@ export function Header() {
               >
                 FAQ
               </button>
-              <Link
-                href="/login"
-                className="text-[13px] text-foreground-tertiary hover:text-foreground transition-colors"
-              >
-                Login
-              </Link>
-              <Link href="/apply">
-                <Button size="sm">Apply</Button>
-              </Link>
+              {ENROLLMENT_CLOSED ? (
+                <Link href="/login">
+                  <Button size="sm">Login</Button>
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="text-[13px] text-foreground-tertiary hover:text-foreground transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link href="/apply">
+                    <Button size="sm">Apply</Button>
+                  </Link>
+                </>
+              )}
             </nav>
 
             {/* Mobile hamburger */}
@@ -106,16 +115,24 @@ export function Header() {
             >
               FAQ
             </button>
-            <Link
-              href="/login"
-              className="text-lg text-foreground-secondary hover:text-foreground transition-colors"
-              onClick={() => setMobileOpen(false)}
-            >
-              Login
-            </Link>
-            <Link href="/apply" onClick={() => setMobileOpen(false)}>
-              <Button size="lg" className="w-full">Apply</Button>
-            </Link>
+            {ENROLLMENT_CLOSED ? (
+              <Link href="/login" onClick={() => setMobileOpen(false)}>
+                <Button size="lg" className="w-full">Login</Button>
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-lg text-foreground-secondary hover:text-foreground transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link href="/apply" onClick={() => setMobileOpen(false)}>
+                  <Button size="lg" className="w-full">Apply</Button>
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       )}
