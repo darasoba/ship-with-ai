@@ -1,5 +1,5 @@
 // Flip this to true when enrollment is closed
-export const ENROLLMENT_CLOSED = false
+export const ENROLLMENT_CLOSED = true
 
 // Set to false to hide premium plan and show single-plan pricing
 export const SHOW_PREMIUM_PLAN = true
