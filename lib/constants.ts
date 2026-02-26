@@ -1,6 +1,16 @@
 // Flip this to true when enrollment is closed
 export const ENROLLMENT_CLOSED = false
 
+export const PREMIUM_BOOKING_URL = '' // e.g. https://calendly.com/...
+export const PREMIUM_CONTACT_URL = '' // e.g. https://wa.me/... or mailto:...
+export const PREMIUM_RESOURCES: { title: string; description: string; url: string }[] = [
+  // { title: 'Custom Starter Template', description: '...', url: '...' },
+]
+
+export const RECORDINGS: { title: string; date: string; url: string }[] = [
+  // { title: 'Week 1 — Kickoff Session', date: '2026-03-02', url: 'https://...' },
+]
+
 // Set to false to hide premium plan and show single-plan pricing
 export const SHOW_PREMIUM_PLAN = true
 
