@@ -11,12 +11,24 @@ export const metadata = {
     'Build your first project with AI in a weekend. A free step-by-step guide covering Claude Code, Cursor, Codex, and the 10 prompting principles that make AI coding work.',
 }
 
+const hasSupabase =
+  process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
+  !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 export default async function GuidePage() {
   const { html, toc } = await renderContentFile('free-guide.md')
 
+  let isLoggedIn = false
+  if (hasSupabase) {
+    const { createClient } = await import('@/lib/supabase/server')
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    isLoggedIn = !!user
+  }
+
   return (
     <>
-      <Header />
+      <Header isLoggedIn={isLoggedIn} />
 
       <main className="max-w-6xl mx-auto px-6 py-12 md:py-20">
         <div className="lg:grid lg:grid-cols-[220px_1fr] lg:gap-10">

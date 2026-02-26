@@ -1,34 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
 import { ENROLLMENT_CLOSED } from '@/lib/constants'
 
-const hasSupabase =
-  process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
-  !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-export function Header() {
+export function Header({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const pathname = usePathname()
-
-  useEffect(() => {
-    if (!hasSupabase) return
-    import('@/lib/supabase/client').then(({ createClient }) => {
-      const supabase = createClient()
-      supabase.auth.getUser().then(({ data: { user } }) => {
-        setIsLoggedIn(!!user)
-      })
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setIsLoggedIn(!!session?.user)
-      })
-      return () => subscription.unsubscribe()
-    })
-  }, [])
 
   const scrollTo = (id: string) => {
     setMobileOpen(false)

@@ -125,6 +125,10 @@ const faqs = [
   },
 ]
 
+const hasSupabase =
+  process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
+  !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 export default async function Home() {
   const headerList = await headers()
   const isNigeria = headerList.get('x-vercel-ip-country')?.toUpperCase() === 'NG'
@@ -132,9 +136,17 @@ export default async function Home() {
   const premiumPrice = formatPrice(PLANS.premium, isNigeria)
   const startingPrice = isNigeria ? `₦${PLANS.basic.priceNGN.toLocaleString()}` : `$${PLANS.basic.priceUSD}`
 
+  let isLoggedIn = false
+  if (hasSupabase) {
+    const { createClient } = await import('@/lib/supabase/server')
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    isLoggedIn = !!user
+  }
+
   return (
     <>
-      <Header />
+      <Header isLoggedIn={isLoggedIn} />
 
       <main className="min-h-screen">
         {/* ── Hero (full viewport) ── */}
