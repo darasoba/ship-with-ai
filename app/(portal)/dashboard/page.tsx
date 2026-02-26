@@ -222,6 +222,12 @@ export default async function DashboardPage() {
       <div>
         <h2 className="text-lg font-semibold text-foreground mb-4">Course Materials</h2>
         <div className="grid gap-10 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+          <Link href="/recordings">
+            <FolderCard
+              title="Session Recordings"
+              description={RECORDINGS.length > 0 ? `${RECORDINGS.length} recording${RECORDINGS.length === 1 ? '' : 's'}` : 'Live session recordings'}
+            />
+          </Link>
           {MATERIALS_ORDER.map((m) => (
             <Link key={m.slug} href={`/materials/${m.slug}`}>
               <FolderCard
@@ -230,12 +236,6 @@ export default async function DashboardPage() {
               />
             </Link>
           ))}
-          <Link href="/recordings">
-            <FolderCard
-              title="Session Recordings"
-              description={RECORDINGS.length > 0 ? `${RECORDINGS.length} recording${RECORDINGS.length === 1 ? '' : 's'}` : 'Live session recordings'}
-            />
-          </Link>
         </div>
       </div>
     </div>

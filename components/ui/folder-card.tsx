@@ -17,8 +17,8 @@ export function FolderCard({ title, description, meta, className = '', ...props 
       <FolderIcon className="w-full h-auto" />
 
       {/* Text overlay positioned on the front panel area */}
-      <div className="absolute left-[12%] right-[6%] bottom-[8%] top-[50%] flex items-center justify-center pointer-events-none">
-        <div className="text-left">
+      <div className="absolute left-[12%] right-[6%] bottom-[8%] top-[50%] flex items-center pointer-events-none">
+        <div className="text-left w-full">
           <h3 className="font-semibold text-white/90 text-sm leading-snug">{title}</h3>
           <p className="text-[12px] text-white/50 mt-1.5 line-clamp-2 leading-relaxed">{description}</p>
           {meta && (
