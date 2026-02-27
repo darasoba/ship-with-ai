@@ -1,5 +1,5 @@
 // Flip this to true when enrollment is closed
-export const ENROLLMENT_CLOSED = false
+export const ENROLLMENT_CLOSED = true
 
 export const DISCORD_URL = 'https://discord.gg/WPJqB7qK'
 
