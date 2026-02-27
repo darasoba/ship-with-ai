@@ -160,12 +160,12 @@ export const CATEGORY_LABELS: Record<MaterialCategory, string> = {
 export const PRE_WORK = {
   theme: 'Complete before the first session',
   milestones: [
-    'Join the Discord channel',
     'Set up your dev environment (Node.js, VS Code or Cursor)',
     'Install Claude Code or set up Cursor',
     'Create a GitHub account (if you don\'t have one)',
     'Read the Onboarding material',
     'Write a one-sentence description of the project you want to build',
+    'Join the Discord channel when shared',
   ],
 }
 
