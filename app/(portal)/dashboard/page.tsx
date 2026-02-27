@@ -1,4 +1,4 @@
-import { MATERIALS_ORDER, WEEK_CONFIG, ANNOUNCEMENT, PREMIUM_BOOKING_URL, PREMIUM_CONTACT_URL, PREMIUM_RESOURCES, RECORDINGS } from '@/lib/constants'
+import { MATERIALS_ORDER, WEEK_CONFIG, PRE_WORK, ANNOUNCEMENT, PREMIUM_BOOKING_URL, PREMIUM_CONTACT_URL, PREMIUM_RESOURCES, RECORDINGS } from '@/lib/constants'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { FolderCard } from '@/components/ui/folder-card'
@@ -59,7 +59,7 @@ export default async function DashboardPage() {
     }
   }
   const hasStarted = currentWeek > 0
-  const currentWeekConfig = WEEK_CONFIG[hasStarted ? currentWeek - 1 : 0]
+  const currentWeekConfig = hasStarted ? WEEK_CONFIG[currentWeek - 1] : null
   const continueMaterial = MATERIALS_ORDER.find((m) => m.slug === continueSlug)
 
   return (
@@ -206,15 +206,17 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* This Week's Focus */}
+      {/* Pre-work checklist or This Week's Focus */}
       <div>
         <h2 className="text-lg font-semibold text-foreground mb-1">
-          This Week&apos;s Focus
+          {hasStarted ? 'This Week\u2019s Focus' : 'Pre-Work Checklist'}
         </h2>
-        <p className="text-sm text-muted mb-4">{currentWeekConfig.theme}</p>
+        <p className="text-sm text-muted mb-4">
+          {hasStarted ? currentWeekConfig!.theme : PRE_WORK.theme}
+        </p>
         <DashboardProgress
           week={currentWeek}
-          milestones={currentWeekConfig.milestones}
+          milestones={hasStarted ? currentWeekConfig!.milestones : PRE_WORK.milestones}
         />
       </div>
 
