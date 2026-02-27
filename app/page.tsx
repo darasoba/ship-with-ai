@@ -129,13 +129,14 @@ const hasSupabase =
   process.env.NEXT_PUBLIC_SUPABASE_URL?.startsWith('http') &&
   !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ waitlist?: string }> }) {
   const headerList = await headers()
   const isNigeria = headerList.get('x-vercel-ip-country')?.toUpperCase() === 'NG'
   const basicPrice = formatPrice(PLANS.basic, isNigeria)
   const premiumPrice = formatPrice(PLANS.premium, isNigeria)
   const startingPrice = isNigeria ? `₦${PLANS.basic.priceNGN.toLocaleString()}` : `$${PLANS.basic.priceUSD}`
 
+  const { waitlist } = await searchParams
   let isLoggedIn = false
   if (hasSupabase) {
     const { createClient } = await import('@/lib/supabase/server')
@@ -226,21 +227,30 @@ export default async function Home() {
                   Join the waitlist to get <span className="text-foreground font-semibold">early access</span> and
                   behind-the-scenes updates. No spam, no nonsense.
                 </p>
-                <form className="mt-8 flex gap-2" action="/api/waitlist" method="POST">
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="Email"
-                    className="flex-1 min-w-0 px-4 py-3 rounded-xl bg-surface border border-border text-foreground text-[15px] placeholder:text-foreground-tertiary"
-                  />
-                  <button
-                    type="submit"
-                    className="px-5 py-3 rounded-xl bg-white text-[#1a1a1a] text-[14px] font-semibold hover:bg-gray-100 transition-colors whitespace-nowrap"
-                  >
-                    Notify me
-                  </button>
-                </form>
+                {waitlist === 'success' ? (
+                  <p className="mt-8 text-[15px] text-green-400 font-medium">
+                    You&apos;re on the list! We&apos;ll email you when enrollment opens.
+                  </p>
+                ) : (
+                  <form className="mt-8 flex gap-2" action="/api/waitlist" method="POST">
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      placeholder="Email"
+                      className="flex-1 min-w-0 px-4 py-3 rounded-xl bg-surface border border-border text-foreground text-[15px] placeholder:text-foreground-tertiary"
+                    />
+                    <button
+                      type="submit"
+                      className="px-5 py-3 rounded-xl bg-white text-[#1a1a1a] text-[14px] font-semibold hover:bg-gray-100 transition-colors whitespace-nowrap"
+                    >
+                      Notify me
+                    </button>
+                    {waitlist === 'error' && (
+                      <p className="mt-2 text-[14px] text-red-400">Something went wrong. Please try again.</p>
+                    )}
+                  </form>
+                )}
               </FadeIn>
             </div>
           </section>
