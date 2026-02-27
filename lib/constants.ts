@@ -1,6 +1,8 @@
 // Flip this to true when enrollment is closed
 export const ENROLLMENT_CLOSED = false
 
+export const DISCORD_URL = 'https://discord.gg/WPJqB7qK'
+
 export const PREMIUM_BOOKING_URL = '' // e.g. https://calendly.com/...
 export const PREMIUM_CONTACT_URL = '' // e.g. https://wa.me/... or mailto:...
 export const PREMIUM_RESOURCES: { title: string; description: string; url: string }[] = [
